@@ -1,0 +1,14 @@
+{
+  "url": "https://overpass-api.de/api/interpreter",
+  "consulta": "[out:json][timeout:60];(nwr[\"shop\"=\"convenience\"](19.2,-103.78,19.31,-103.67);nwr[\"shop\"=\"supermarket\"](19.2,-103.78,19.31,-103.67);nwr[\"shop\"=\"greengrocer\"](19.2,-103.78,19.31,-103.67);nwr[\"shop\"=\"butcher\"](19.2,-103.78,19.31,-103.67);nwr[\"shop\"=\"general\"](19.2,-103.78,19.31,-103.67);nwr[\"shop\"=\"kiosk\"](19.2,-103.78,19.31,-103.67););out center tags;",
+  "licencia": "ODbL 1.0 (OpenStreetMap)",
+  "nota": "etiquetas de contacto eliminadas antes de guardar",
+  "terminos": "https://wiki.openstreetmap.org/wiki/Overpass_API",
+  "fuente": "osm_overpass",
+  "archivo": "tiendas_2026-11-23.json.gz",
+  "bytes": 23996,
+  "sha256": "abd06be5241b2051344fe8ce469bc1f6737bdb09f49a464869fa147ba89f69d4",
+  "capturado_utc": "2026-11-23T22:14:19.203924+00:00",
+  "user_agent": "TDL-AbarrotesPOS/0.2.0 (proyecto academico TecNM campus Colima; contacto: github.com/salvadorafer11/abarrotespos)",
+  "version_extractor": "0.2.0"
+}

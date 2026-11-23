@@ -16,6 +16,16 @@ USER_AGENT = (
 )
 ZONA_HORARIA = "America/Mexico_City"
 
+# APIs publicas hechas para consumo por programa. Su robots.txt bloquea las rutas /api/
+# porque esta pensado para rastreadores web (buscadores), no para clientes de la API.
+# Decision del equipo (E2): con estos hosts se siguen sus TERMINOS DE USO publicados
+# (User-Agent honesto, pausa entre peticiones, una consulta por captura).
+# Cualquier otro sitio sigue sujeto a robots.txt sin excepcion.
+APIS_CON_TERMINOS = {
+    "overpass-api.de": "https://wiki.openstreetmap.org/wiki/Overpass_API",
+    "archive-api.open-meteo.com": "https://open-meteo.com/en/terms",
+}
+
 # --- Rutas ---------------------------------------------------------------------
 RAIZ = Path(__file__).resolve().parent.parent
 DIR_BRONCE = RAIZ / "data" / "bronce"

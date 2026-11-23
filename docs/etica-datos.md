@@ -16,6 +16,9 @@ Marco general: Ley Federal de Protección de Datos Personales en Posesión de lo
 ## Uso secundario y venta del sistema
 Si el sistema se renta a otras tiendas, los datos de cada tienda solo los ve su dueño. No se venden ni se cruzan datos entre clientes sin su permiso por escrito.
 
+## robots.txt y APIs públicas (decisión del equipo, 23-nov-2026)
+Al correr la captura, Overpass y Open-Meteo respondieron que su `robots.txt` no permite las rutas `/api/`. Ese archivo está dirigido a **rastreadores web** (buscadores que recorren páginas); las dos son **APIs públicas documentadas para consumo por programa**. Decisión: para esos dos hosts (`APIS_CON_TERMINOS` en `extractores/config.py`) se siguen sus **términos de uso** en lugar de `robots.txt`: User-Agent con contacto, pausa ≥ 1.5 s, una sola consulta por captura y la liga a los términos en cada `.meta.json`. **Cualquier otro sitio sigue sujeto a `robots.txt` sin excepción** (prueba `test_api_con_terminos_pasa_y_sitio_comun_respeta_robots`).
+
 ## Ubicación de la tienda piloto
 Las coordenadas de `extractores/config.py` son las del **local comercial** (dato público: cualquiera lo ve en la calle y en Google Maps), no del domicilio de una persona. Se toman con permiso del dueño en la visita; si el dueño no quiere que aparezca su tienda en el mapa del repositorio público, se redondean a 3 decimales (~100 m).
 

@@ -9,6 +9,8 @@ Parte del codigo base del Kit de arranque TDL, con estos cambios:
 3. Los errores de red tambien se reintentan con espera exponencial.
 4. Acepta parametros de consulta y encabezados (para APIs con token, como Banxico).
    El token va en un encabezado para que nunca quede en la URL ni en los metadatos.
+5. Las APIs publicas de config.APIS_CON_TERMINOS (Overpass, Open-Meteo) se rigen por sus
+   terminos de uso: su robots.txt bloquea /api/ para rastreadores, no para clientes.
 """
 import time
 import urllib.robotparser
@@ -16,7 +18,7 @@ from urllib.parse import urlparse
 
 import requests
 
-from extractores.config import USER_AGENT
+from extractores.config import APIS_CON_TERMINOS, USER_AGENT
 
 
 class ExtractorEtico:
@@ -58,10 +60,10 @@ class ExtractorEtico:
         return self.robots[base]
 
     def get(self, url, params=None, headers=None, intentos=3):
-        reglas = self._reglas(url)
-        if not reglas.can_fetch(self.user_agent, url):
-            raise PermissionError(f"robots.txt no permite {url}")
         dominio = urlparse(url).netloc
+        reglas = self._reglas(url)
+        if not reglas.can_fetch(self.user_agent, url) and dominio not in APIS_CON_TERMINOS:
+            raise PermissionError(f"robots.txt no permite {url}")
         pausa = max(self.pausa, reglas.crawl_delay(self.user_agent) or 0)
         ultimo_error = None
         for i in range(intentos):

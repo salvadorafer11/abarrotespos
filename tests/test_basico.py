@@ -90,3 +90,32 @@ def test_linaje_rastrea_oro_hasta_bronce(tmp_path):
     meta = ruta.parent / "x.meta.json"
     meta.write_text(json.dumps({**json.loads(meta.read_text()), "sha256": "0" * 64}))
     assert not linaje.rastrear("oro.csv", 0, raiz=tmp_path)["integro"]
+
+
+class _Resp:
+    def __init__(self, codigo, texto=""):
+        self.status_code, self.text = codigo, texto
+
+    def raise_for_status(self):
+        pass
+
+
+class _Sesion:
+    def __init__(self):
+        self.headers = {}
+
+    def get(self, url, **kw):
+        if url.endswith("/robots.txt"):
+            return _Resp(200, "User-agent: *\nDisallow: /api/\n")
+        return _Resp(200, "ok")
+
+
+def test_api_con_terminos_pasa_y_sitio_comun_respeta_robots():
+    import pytest
+
+    from extractores.base import ExtractorEtico
+
+    ex = ExtractorEtico(pausa=0, sesion=_Sesion())
+    assert ex.get("https://overpass-api.de/api/interpreter").text == "ok"
+    with pytest.raises(PermissionError):
+        ex.get("https://ejemplo.com/api/precios")

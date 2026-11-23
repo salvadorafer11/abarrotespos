@@ -44,7 +44,8 @@ def capturar(extractor=None):
         "osm_overpass",
         contenido,
         {"url": config.OVERPASS_URL, "consulta": q, "licencia": "ODbL 1.0 (OpenStreetMap)",
-         "nota": "etiquetas de contacto eliminadas antes de guardar"},
+         "nota": "etiquetas de contacto eliminadas antes de guardar",
+         "terminos": config.APIS_CON_TERMINOS["overpass-api.de"]},
         subruta=hoy[:7],
         nombre=f"tiendas_{hoy}",
     )

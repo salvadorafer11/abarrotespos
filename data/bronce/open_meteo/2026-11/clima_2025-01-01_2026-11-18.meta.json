@@ -1,0 +1,20 @@
+{
+  "url": "https://archive-api.open-meteo.com/v1/archive",
+  "params": {
+    "latitude": 19.2675,
+    "longitude": -103.7375,
+    "start_date": "2025-01-01",
+    "end_date": "2026-11-18",
+    "daily": "temperature_2m_max,temperature_2m_min,precipitation_sum",
+    "timezone": "America/Mexico_City"
+  },
+  "licencia": "CC BY 4.0",
+  "terminos": "https://open-meteo.com/en/terms",
+  "fuente": "open_meteo",
+  "archivo": "clima_2025-01-01_2026-11-18.json.gz",
+  "bytes": 19678,
+  "sha256": "62dbc1f759c43f1b9c7d27aa014c4bc4558374f020077638f97b59a664402b48",
+  "capturado_utc": "2026-11-23T22:14:26.652819+00:00",
+  "user_agent": "TDL-AbarrotesPOS/0.2.0 (proyecto academico TecNM campus Colima; contacto: github.com/salvadorafer11/abarrotespos)",
+  "version_extractor": "0.2.0"
+}

@@ -31,9 +31,9 @@ def rastrear(archivo_oro, fila=0, raiz=RAIZ):
     with gzip.open(ruta, "rb") as g:
         sha = hashlib.sha256(g.read()).hexdigest()
     return {
-        "oro": f"{archivo_oro.as_posix()} (fila {fila})",
+        "tabla": f"{archivo_oro.as_posix()} (fila {fila})",
         "fuente": fuente,
-        "capturado_utc_en_oro": registro["capturado_utc"],
+        "capturado_utc_en_tabla": registro["capturado_utc"],
         "bronce": ruta.relative_to(raiz).as_posix(),
         "capturado_utc_en_meta": meta["capturado_utc"],
         "sha256_meta": meta["sha256"],

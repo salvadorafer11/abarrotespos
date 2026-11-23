@@ -1,1 +1,89 @@
-osm_id,nombre,giro,lat,lon
+osm_id,nombre,giro,lat,lon,distancia_piloto_m,competencia_directa,fuente,archivo_bronce,capturado_utc
+node/1305931029,Soriana Híper,supermarket,19.2726068,-103.737553,568,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+node/1498986653,Oxxo,convenience,19.2531866,-103.712525,3067,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+node/2125811422,Oxxo,convenience,19.255106,-103.7158735,2656,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+node/4292894459,Kiosko,general,19.249138,-103.727037,2318,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+node/4292906462,Kiosko,general,19.2674453,-103.717134,2138,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+node/4391276296,Kiosko,general,19.260682,-103.7063074,3361,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+node/4442293991,Kiosko gonzalo de sandoval,supermarket,19.2429653,-103.6990448,4872,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+node/4831582530,Kiosko,general,19.2707474,-103.7165161,2232,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+node/4831590718,Oxxo,general,19.2648837,-103.717994,2068,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+node/4831604929,Kiosko,general,19.2574404,-103.718034,2329,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+node/4892917771,Mini Super Las Cuatas,convenience,19.2594881,-103.7320575,1058,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+node/4892960926,Kiosko Multiservicios,convenience,19.2597178,-103.7320924,1035,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+node/4893955702,(sin nombre),greengrocer,19.260034,-103.7322582,996,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+node/4896121160,Carnitas,butcher,19.2584544,-103.7317125,1175,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+node/4896165379,abarrotes el triangulito,convenience,19.258227,-103.7302758,1280,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+node/4896166733,Carnicería la Perla,butcher,19.257428,-103.7313358,1293,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+node/4896201046,Carniceria San Francisco II,butcher,19.2577151,-103.7303403,1322,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+node/4896201054,Oxxo,convenience,19.2571135,-103.729939,1401,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+node/4896220219,abarrotes,convenience,19.2578293,-103.7278114,1480,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+node/4896259595,Kiosko,general,19.2557908,-103.72688,1714,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+node/4906184069,Abarrotes Mony,supermarket,19.2362626,-103.7208357,3889,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+node/5689079000,Oxxo,general,19.2632037,-103.711792,2740,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+node/5828338472,Kiosko,general,19.2844556,-103.735929,1893,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+node/5828339732,Kiosko,supermarket,19.2826741,-103.7318287,1789,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+node/5859806929,Frutería La Merced,greengrocer,19.2877799,-103.7300865,2385,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+node/5867067834,Frutería Corona,convenience,19.2859324,-103.7352332,2063,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+node/5872371220,Auto Servicio Cuatro G,convenience,19.2891485,-103.7339687,2436,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+node/5872423556,Minisuper Santa Anita,convenience,19.2892289,-103.7335168,2452,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+node/5877059722,Oxxo,convenience,19.2737642,-103.7134557,2618,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+node/6084169139,Frutas y Verduras Gretel,greengrocer,19.2877091,-103.7257584,2563,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+node/6084169170,Oxxo,convenience,19.2843024,-103.7272176,2158,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+node/6342452890,Todo de Pollo,butcher,19.2841081,-103.7316923,1945,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+node/6343919453,Carnicería Las Fragatas,butcher,19.2884653,-103.7343285,2355,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+node/6344286061,Carnicería Becerra,butcher,19.2799535,-103.7331367,1459,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+node/6420004265,El Golfito,convenience,19.2732572,-103.7124673,2704,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+node/7005358228,Abarrotes Michel,convenience,19.2838868,-103.7317971,1918,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+node/7345543057,SuKarne,butcher,19.2716545,-103.7344236,564,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+node/7370660850,Frutería La Mexicana,greengrocer,19.2719516,-103.7313658,812,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+node/7377541566,Carnicería El Torreón,butcher,19.2681148,-103.7169215,2161,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+node/7499677099,Carnicería San Francisco,butcher,19.2553015,-103.7309492,1521,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+node/7703765685,Oxxo,convenience,19.2501057,-103.727993,2176,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+node/10717881771,Soriana Súper,supermarket,19.2754858,-103.716424,2384,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+node/12057463801,Oxxo,convenience,19.2440989,-103.7287538,2759,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+node/12865817701,Oxxo,convenience,19.2513435,-103.7140377,3048,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+node/13340696501,Oxxo,convenience,19.2346511,-103.7568387,4179,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+node/13340696701,Oxxo,convenience,19.2441392,-103.7473735,2797,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+node/13450180793,Camila,convenience,19.2853803,-103.7294631,2160,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+node/13910283292,Soho Showroom,supermarket,19.255492,-103.7170026,2532,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+node/14133956916,Kiosko,convenience,19.2749206,-103.7031038,3703,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+node/14197947589,Súper Macaza,supermarket,19.2688554,-103.7166385,2195,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+way/115813479,(sin nombre),supermarket,19.23845,-103.7159128,3946,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+way/171809748,Ley Coliman,supermarket,19.2431492,-103.7388587,2711,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+way/171822233,Walmart Supercenter,supermarket,19.2573498,-103.7205064,2111,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+way/188831171,Walmart Supercenter,supermarket,19.2385462,-103.7155281,3960,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+way/376944045,Soriana Híper,supermarket,19.2725922,-103.7374702,566,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+way/404305372,El Golfito,supermarket,19.2581576,-103.7084888,3218,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+way/428044121,Oxxo,convenience,19.2539848,-103.7439038,1646,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+way/428046475,Oxxo,convenience,19.2511435,-103.7458733,2020,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+way/566740632,Bodega Aurrera,supermarket,19.2555165,-103.743476,1473,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+way/620188871,Bodega Aurrera Express,convenience,19.2875179,-103.7299975,2361,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+way/620195613,Kiosko,general,19.2870845,-103.7265966,2460,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+way/621049776,Frutería Zárate,greengrocer,19.2861398,-103.7350862,2088,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+way/621590954,Super Cremería Guadalupana,convenience,19.2868851,-103.7332811,2201,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+way/621626128,Kiosko,general,19.2880822,-103.7346081,2309,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+way/621626141,Oxxo,convenience,19.2886524,-103.7336961,2386,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+way/633779264,El Mercadito,convenience,19.2862883,-103.7305833,2212,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+way/647874312,Kiosko,general,19.2551561,-103.7487661,1812,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+way/677549274,Kiosko,general,19.280747,-103.7329362,1549,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+way/729838756,Kiosko,general,19.2869094,-103.7456686,2322,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+way/729838757,Oxxo,convenience,19.2857418,-103.7449239,2173,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+way/734297086,Oxxo,convenience,19.2707143,-103.7323042,652,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+way/749106433,CarneMart,butcher,19.2513697,-103.7451785,1966,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+way/772825205,Oxxo,convenience,19.2785171,-103.7335772,1292,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+way/785791923,Kiosko,general,19.2739045,-103.7401091,763,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+way/831165582,(sin nombre),kiosk,19.2879238,-103.722123,2786,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+way/931843225,(sin nombre),greengrocer,19.2602821,-103.7251974,1520,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+way/932567727,(sin nombre),butcher,19.26063,-103.7233203,1673,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+way/1159014604,Kiosko,general,19.2451269,-103.7127974,3594,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+way/1159041368,Kiosko,general,19.2448862,-103.7106143,3780,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+way/1169380280,Bodega Aurrera,supermarket,19.2485041,-103.7261008,2428,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+way/1177918971,Soriana Mercado,supermarket,19.2428035,-103.7369796,2747,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+way/1280988456,Oxxo,convenience,19.2310658,-103.7237365,4301,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+way/1288737945,Bodega Aurrera,supermarket,19.2433471,-103.7592303,3524,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+way/1340831278,Kiosko,general,19.2305553,-103.7226929,4392,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+way/1422106215,Oxxo,convenience,19.2473758,-103.7388217,2242,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+way/1432415459,Kiosko,general,19.2841856,-103.7447767,2006,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+way/1456290557,Kiosko,general,19.2505614,-103.7028021,4100,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
+way/1470106380,Kiosko,general,19.2507066,-103.6865161,5668,False,osm_overpass,tiendas_2026-11-23.json.gz,2026-11-23T22:14:19.203924+00:00
