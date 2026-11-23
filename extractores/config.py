@@ -27,13 +27,16 @@ BITACORA = RAIZ / "calidad" / "bitacora-captura.csv"
 
 # --- Zona y cliente piloto -------------------------------------------------------
 # Tienda piloto: Abarrotes "El Amiguito" (col. General Manuel Alvarez, Villa de Alvarez).
-# PENDIENTE (Julio): poner las coordenadas reales tomadas de Google Maps. Mientras tanto
-# se usa el centro de Villa de Alvarez. Son coordenadas de un NEGOCIO, no de una persona.
+# J3 (Julio): coordenadas reales tomadas de Google Maps (clic derecho -> copiar coordenadas).
+# Mientras sean None se usa el centro de Villa de Alvarez y el tablero lo avisa.
+# Son coordenadas de un NEGOCIO, no de una persona.
+TIENDA_LAT = None
+TIENDA_LON = None
 TIENDA_PILOTO = {
     "nombre": "Abarrotes El Amiguito (piloto)",
-    "lat": float(os.environ.get("TIENDA_LAT", "19.2675")),
-    "lon": float(os.environ.get("TIENDA_LON", "-103.7375")),
-    "coordenadas_confirmadas": bool(os.environ.get("TIENDA_LAT")),
+    "lat": float(os.environ.get("TIENDA_LAT") or TIENDA_LAT or 19.2675),
+    "lon": float(os.environ.get("TIENDA_LON") or TIENDA_LON or -103.7375),
+    "coordenadas_confirmadas": TIENDA_LAT is not None or bool(os.environ.get("TIENDA_LAT")),
 }
 # Caja de Colima + Villa de Alvarez (sur, oeste, norte, este) para la fuente geoespacial.
 BBOX_ZONA = (19.20, -103.78, 19.31, -103.67)
