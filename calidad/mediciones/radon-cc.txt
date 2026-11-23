@@ -1,0 +1,62 @@
+# 2026-11-23 14:54 · radon 6.0.1 · radon cc -a -s pipeline extractores laboratorio tablero tests
+pipeline\ejecutar.py
+    F 109:0 plata_tiendas - B (7)
+    F 156:0 main - B (7)
+    F 48:0 _ultimo - A (2)
+    F 67:0 validar - A (2)
+    F 88:0 plata_clima - A (2)
+    F 132:0 oro - A (2)
+    F 53:0 _meta - A (1)
+    F 58:0 ventas_a_bronce - A (1)
+    F 78:0 plata_ventas - A (1)
+    F 101:0 _distancia_m - A (1)
+pipeline\ventas_demo.py
+    F 65:0 generar - C (13)
+    F 53:0 _calendario_eventos - B (8)
+extractores\base.py
+    M 60:4 ExtractorEtico.get - B (7)
+    C 22:0 ExtractorEtico - A (5)
+    M 38:4 ExtractorEtico._reglas - A (5)
+    M 23:4 ExtractorEtico.__init__ - A (2)
+    M 33:4 ExtractorEtico._esperar - A (2)
+extractores\bronce.py
+    F 61:0 registrar - A (5)
+    F 22:0 guardar - A (3)
+    F 53:0 id_ejecucion - A (2)
+    F 18:0 ahora_utc - A (1)
+    F 57:0 disparador - A (1)
+extractores\clima.py
+    F 15:0 capturar - A (4)
+    F 41:0 main - A (2)
+extractores\config.py
+    F 60:0 denue_token - A (2)
+extractores\tiendas_osm.py
+    F 27:0 sin_datos_personales - A (4)
+    F 21:0 consulta_overpass - A (2)
+    F 35:0 capturar - A (2)
+    F 54:0 main - A (2)
+laboratorio\experimento_factorial.py
+    F 101:0 plan_2k - B (10)
+    F 70:0 _leer - B (6)
+    F 120:0 correr - B (6)
+    F 264:0 main - B (6)
+    F 146:0 dos_factores - A (5)
+    F 63:0 _escribir - A (4)
+    F 81:0 corrida - A (4)
+    F 185:0 analizar - A (4)
+    F 242:0 confirmar - A (3)
+    F 49:0 datos_base - A (2)
+    F 116:0 _maquina - A (2)
+    F 217:0 _graficas - A (2)
+    F 56:0 _agregar - A (1)
+    F 168:0 matrices - A (1)
+tests\test_basico.py
+    F 48:0 test_fraccionado_tiene_alias_d_igual_abc - A (4)
+    F 10:0 test_demo_reproducible_y_sin_nombres - A (3)
+    F 19:0 test_puerta_manda_a_cuarentena_lo_que_rompe_reglas - A (3)
+    F 30:0 test_oro_conserva_linaje - A (3)
+    F 38:0 test_osm_quita_contactos - A (2)
+    F 44:0 test_distancia_haversine - A (2)
+
+49 blocks (classes, functions, methods) analyzed.
+Average complexity: A (3.489795918367347)

@@ -1,0 +1,82 @@
+{
+  "medido_en": "2026-11-23T14:56-06:00",
+  "entorno": {
+    "sistema": "Windows-11-10.0.26300-SP0",
+    "python": "3.15.2",
+    "pandas": "3.1.1"
+  },
+  "adecuacion_funcional": {
+    "criterios": 12,
+    "hechos": 0,
+    "pct_hechos": 0.0,
+    "estados": [
+      "Extractor y mapa listos; falta primera captura y GeoPandas",
+      "Borrador",
+      "Columnas listas; falta documento",
+      "Script listo; faltan corridas reales",
+      "Pendiente",
+      "Matrices generadas; falta explicación",
+      "Pendiente",
+      "Métricas definidas; faltan mediciones",
+      "Métricas definidas; faltan mediciones",
+      "Plantilla",
+      "Plantilla",
+      "Plantilla"
+    ]
+  },
+  "eficiencia_de_desempeno": {
+    "medido": true,
+    "archivo": "confirmacion-angel.csv",
+    "media_actual_s": 0.2436,
+    "media_optimo_s": 0.0435,
+    "corridas_por_config": {
+      "actual": 5,
+      "optimo": 5
+    },
+    "mejora_pct": 82.1
+  },
+  "compatibilidad": {
+    "csv_lee_el_tablero": true,
+    "parquet_ida_y_vuelta_sin_perdida": {
+      "ventas_diarias": true,
+      "ventas_producto_mes": true,
+      "fiados_por_cliente": true
+    },
+    "formatos_demostrados": 2
+  },
+  "capacidad_de_interaccion_tablero": {
+    "excepciones": 0,
+    "titulos": 1,
+    "metricas": [
+      "Venta del mes",
+      "Ganancia del mes",
+      "Tickets del mes",
+      "Vendido a fiado"
+    ],
+    "secciones": [
+      "Venta por día",
+      "Productos que más dejan (último mes)",
+      "Venta promedio por día de la semana",
+      "Días con evento vs días normales"
+    ],
+    "avisos": 1,
+    "mapas_o_graficas_extra": 0,
+    "segundos_de_carga": 1.31
+  },
+  "flexibilidad": {
+    "sin_variables": {
+      "nombre": "Abarrotes El Amiguito (piloto)",
+      "lat": 19.2675,
+      "lon": -103.7375,
+      "coordenadas_confirmadas": false
+    },
+    "con_variables_de_prueba": {
+      "nombre": "Abarrotes El Amiguito (piloto)",
+      "lat": 19.2433,
+      "lon": -103.725,
+      "coordenadas_confirmadas": true
+    },
+    "cambia_sin_editar_codigo": true,
+    "pipeline_usa_la_configuracion": true
+  }
+}

@@ -1,1 +1,6 @@
 numero,fecha,tipo,fase_introducido,fase_eliminado,minutos_correccion,defecto_origen,descripcion
+1,2026-11-23,documentacion,documentacion,revision,,,"antecedentes-normativos.md declaraba ISO 9001:2015 como vigente; la vigente es ISO 9001:2026 (publicada 16-sep-2026). Corregido con fuentes."
+2,2026-11-23,documentacion,documentacion,revision,,,"antecedentes-normativos.md decia que 25010:2023 agrega flexibilidad (es el nuevo nombre de portabilidad) y asignaba 25019 (modelo) a las metricas de 9126-4 (son 25022). Corregido."
+3,2026-11-23,sintaxis,codificacion,compilacion,,,"medir_iso25012.py: linea de 101 caracteres (ruff E501). Corregido."
+4,2026-11-23,funcion,codificacion,prueba,,,"medir_iso25012.py: la expresion de telefonos usaba grupos de captura y pandas avisaba (UserWarning en str.contains). Se cambiaron a grupos sin captura."
+5,2026-11-23,funcion,codificacion,prueba,,,"medir_iso25012.py: al comparar oro original contra la copia regenerada contaba 712 celdas distintas; en pandas 3 los vacios de evento quedan como NA y NA != NA. Se compara el texto crudo del CSV: 68 celdas, igual que diff."
