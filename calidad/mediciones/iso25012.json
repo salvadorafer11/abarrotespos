@@ -1,0 +1,217 @@
+{
+  "raiz_medida": "abarrotespos",
+  "fecha_evaluacion": "2026-11-23",
+  "pandas": "3.1.1",
+  "exactitud": {
+    "ventas_en_plata": 137867,
+    "ventas_en_cuarentena": 0,
+    "pct_aceptado_puerta": 100.0,
+    "reglas_de_negocio_violadas_en_oro": {
+      "venta_negativa": 0,
+      "ganancia_negativa": 0,
+      "ganancia_mayor_que_venta": 0,
+      "venta_fiado_mayor_que_venta": 0,
+      "piezas_menores_que_tickets": 0,
+      "tickets_no_positivos": 0
+    },
+    "filas_oro_revisadas": 1259,
+    "fuente_ventas": "pos_demo"
+  },
+  "completitud": {
+    "fecha_min": "2025-01-01",
+    "fecha_max": "2026-11-15",
+    "dias_en_rango": 684,
+    "dias_con_venta": 684,
+    "dias_faltantes": 0,
+    "fechas_duplicadas": 0,
+    "pct_dias_con_venta": 100.0,
+    "columnas_clima_presentes": [],
+    "dias_con_clima": {
+      "temp_max_c": 0,
+      "lluvia_mm": 0
+    },
+    "pct_dias_con_clima": 0.0,
+    "producto_mes_filas": 575,
+    "producto_mes_combinaciones_posibles": 575,
+    "pct_producto_mes": 100.0,
+    "nulos_fuera_de_evento": {
+      "ventas_diarias": {},
+      "ventas_producto_mes": {},
+      "fiados_por_cliente": {}
+    }
+  },
+  "consistencia": {
+    "venta": {
+      "tabla_a": 6114600.0,
+      "tabla_b": 6114600.0,
+      "diferencia": 0.0
+    },
+    "ganancia": {
+      "tabla_a": 1522863.3,
+      "tabla_b": 1522863.3,
+      "diferencia": 0.0
+    },
+    "piezas": {
+      "tabla_a": 264785.0,
+      "tabla_b": 264785.0,
+      "diferencia": 0.0
+    },
+    "venta_fiado_vs_adeudo_bruto": {
+      "tabla_a": 490128.0,
+      "tabla_b": 490128.0,
+      "diferencia": 0.0
+    }
+  },
+  "credibilidad": {
+    "filas_oro": 1299,
+    "por_fuente": {
+      "pos_demo": 1299
+    },
+    "pct_por_fuente": {
+      "pos_demo": 100.0
+    }
+  },
+  "actualidad": {
+    "fecha_evaluacion": "2026-11-23",
+    "ultima_fecha_de_venta": "2026-11-15",
+    "dias_de_atraso": 8,
+    "ultima_captura_utc": "2026-11-23T11:44:45.150073+00:00",
+    "dias_desde_captura": 0
+  },
+  "conformidad": {
+    "utf8_valido": {
+      "ventas_diarias": true,
+      "ventas_producto_mes": true,
+      "fiados_por_cliente": true
+    },
+    "valores_no_conformes": {
+      "fecha_no_iso8601": 0,
+      "mes_no_aaaa_mm": 0,
+      "capturado_utc_sin_zona_o_invalido": 0
+    },
+    "importes_no_numericos": {
+      "ventas_diarias.venta": 0,
+      "ventas_diarias.ganancia": 0,
+      "ventas_diarias.venta_fiado": 0,
+      "ventas_producto_mes.venta": 0,
+      "ventas_producto_mes.ganancia": 0,
+      "fiados_por_cliente.adeudo_bruto": 0
+    }
+  },
+  "confidencialidad": {
+    "columnas_oro": [
+      "adeudo_bruto",
+      "archivo_bronce",
+      "capturado_utc",
+      "categoria",
+      "cliente_fiado",
+      "compras",
+      "dia_semana",
+      "evento",
+      "fecha",
+      "fuente",
+      "ganancia",
+      "mes",
+      "piezas",
+      "producto",
+      "tickets",
+      "venta",
+      "venta_fiado"
+    ],
+    "columnas_con_nombre_sensible": [],
+    "celdas_revisadas": 9042,
+    "celdas_con_correo": 0,
+    "celdas_con_telefono": 0,
+    "claves_fiado": 40,
+    "claves_fiado_anonimas_F000": 40
+  },
+  "eficiencia": {
+    "bytes_oro": 147220,
+    "mb_oro": 0.14,
+    "dias_de_datos": 684,
+    "kb_por_dia": 0.21
+  },
+  "precision": {
+    "ventas_diarias.venta": {
+      "max_decimales": 1,
+      "valores_con_mas_de_2_decimales": 0,
+      "valores": 684
+    },
+    "ventas_diarias.ganancia": {
+      "max_decimales": 1,
+      "valores_con_mas_de_2_decimales": 0,
+      "valores": 684
+    },
+    "ventas_diarias.venta_fiado": {
+      "max_decimales": 1,
+      "valores_con_mas_de_2_decimales": 0,
+      "valores": 684
+    },
+    "ventas_producto_mes.venta": {
+      "max_decimales": 1,
+      "valores_con_mas_de_2_decimales": 0,
+      "valores": 575
+    },
+    "ventas_producto_mes.ganancia": {
+      "max_decimales": 13,
+      "valores_con_mas_de_2_decimales": 17,
+      "valores": 575
+    },
+    "fiados_por_cliente.adeudo_bruto": {
+      "max_decimales": 1,
+      "valores_con_mas_de_2_decimales": 0,
+      "valores": 40
+    }
+  },
+  "trazabilidad": {
+    "filas_oro": 1299,
+    "filas_con_linaje_completo": 1299,
+    "pct_linaje_completo": 100.0,
+    "archivos_bronce": {
+      "tickets_demo.csv.gz": {
+        "existe_en_bronce": true,
+        "ruta": "data/bronce/pos_demo/demo/tickets_demo.csv.gz",
+        "meta_existe": true,
+        "sha256_recalculado_igual_a_meta": true,
+        "sha256_meta": "5f3bb5146ce4ae069cc532233a8e6f6bcdade82e815e7eea9fb06122bb92d5cb",
+        "capturado_utc_igual_a_meta": true
+      }
+    }
+  },
+  "comprensibilidad": {
+    "diccionario_existe": true,
+    "columnas_en_oro": 26,
+    "columnas_documentadas": 26,
+    "pct_columnas_documentadas": 100.0,
+    "faltantes": []
+  },
+  "comparacion_con_otra_copia": {
+    "ventas_diarias": {
+      "filas": [
+        684,
+        684
+      ],
+      "bytes_identicos": false,
+      "valores_iguales_tolerancia_1e-6": true,
+      "celdas_con_texto_distinto": 68
+    },
+    "ventas_producto_mes": {
+      "filas": [
+        575,
+        575
+      ],
+      "bytes_identicos": true,
+      "valores_iguales_tolerancia_1e-6": true,
+      "celdas_con_texto_distinto": 0
+    },
+    "fiados_por_cliente": {
+      "filas": [
+        40,
+        40
+      ],
+      "bytes_identicos": true,
+      "valores_iguales_tolerancia_1e-6": true,
+      "celdas_con_texto_distinto": 0
+    }
+  }
+}
