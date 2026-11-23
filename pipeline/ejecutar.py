@@ -20,7 +20,7 @@ except ImportError:
     import pandera as pa
 
 from extractores import bronce, config
-from pipeline import ventas_demo
+from pipeline import geo, ventas_demo
 
 ESQUEMA_VENTAS = pa.DataFrameSchema(
     {
@@ -169,8 +169,11 @@ def main(base=None):
     rechazados.to_csv(base / "cuarentena" / "ventas.csv", index=False)
     for nombre, tabla in oro(ventas, clima).items():
         tabla.to_csv(base / "oro" / f"{nombre}.csv", index=False)
+    competencia = geo.competencia(tiendas)  # J2: sjoin de GeoPandas en EPSG:6372
+    competencia.to_csv(base / "oro" / "competencia_tienda_piloto.csv", index=False)
     reporte = {"ventas_en_plata": len(ventas), "ventas_en_cuarentena": len(rechazados),
                "dias_de_clima": len(clima), "tiendas_osm": len(tiendas),
+               "competencia_500m": len(competencia),
                "fuente_ventas": ruta.parent.parent.name}
     (config.DIR_CALIDAD / "reporte-puerta.json").write_text(json.dumps(reporte, indent=2))
     print(json.dumps(reporte, ensure_ascii=False))

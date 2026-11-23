@@ -4,7 +4,7 @@ import pandas as pd
 
 from extractores import tiendas_osm
 from laboratorio import experimento_factorial as ef
-from pipeline import ejecutar, ventas_demo
+from pipeline import ejecutar, geo, ventas_demo
 
 
 def test_demo_reproducible_y_sin_nombres():
@@ -61,3 +61,72 @@ def test_csv_categorico_con_evento_vacio(tmp_path):
     assert len(leido) == len(df)
     assert str(leido["evento"].dtype) == "category"
     assert "" in leido["evento"].cat.categories
+
+
+def test_geo_sjoin_500m_en_metros():
+    piloto = {"nombre": "piloto", "lat": 19.2675, "lon": -103.7375,
+              "coordenadas_confirmadas": True}
+    tiendas = pd.DataFrame({
+        "osm_id": ["node/1", "node/2", "node/3"],
+        "nombre": ["Cerca", "Lejos", "Abarrotes El Amiguito"],
+        "giro": ["convenience"] * 3,
+        "lat": [19.2675 + 0.0027, 19.2675 + 0.0063, 19.2675],  # ~300 m y ~700 m al norte
+        "lon": [-103.7375] * 3,
+        "fuente": "osm_overpass", "archivo_bronce": "x.json.gz", "capturado_utc": "t",
+    })
+    c = geo.competencia(tiendas, piloto, 500)
+    assert list(c["osm_id"]) == ["node/1"]  # la piloto misma no cuenta como competencia
+    esperado = ejecutar._distancia_m(19.2675, -103.7375, 19.2675 + 0.0027, -103.7375)
+    assert abs(c["distancia_m"].iloc[0] - esperado) < 5
+    assert {"fuente", "archivo_bronce", "capturado_utc"} <= set(c.columns)
+
+
+def test_geo_sin_tiendas_no_truena():
+    vacio = pd.DataFrame(columns=["osm_id", "nombre", "giro", "lat", "lon"])
+    assert list(geo.competencia(vacio).columns) == geo.COLUMNAS
+
+
+def test_linaje_rastrea_oro_hasta_bronce(tmp_path):
+    import json
+
+    from extractores import bronce
+    from pipeline import linaje
+
+    ruta = bronce.guardar("pos_demo", b"a,b\n1,2\n", {"capturado_utc": "t0"}, subruta="demo",
+                          nombre="x", base=tmp_path / "data" / "bronce", ext="csv")
+    encabezado = "fuente,archivo_bronce,capturado_utc"
+    (tmp_path / "oro.csv").write_text(f"{encabezado}\npos_demo,{ruta.name},t0\n")
+    r = linaje.rastrear("oro.csv", 0, raiz=tmp_path)
+    assert r["integro"] and r["sha256_meta"] == r["sha256_recalculado"]
+    meta = ruta.parent / "x.meta.json"
+    meta.write_text(json.dumps({**json.loads(meta.read_text()), "sha256": "0" * 64}))
+    assert not linaje.rastrear("oro.csv", 0, raiz=tmp_path)["integro"]
+
+
+class _Resp:
+    def __init__(self, codigo, texto=""):
+        self.status_code, self.text = codigo, texto
+
+    def raise_for_status(self):
+        pass
+
+
+class _Sesion:
+    def __init__(self):
+        self.headers = {}
+
+    def get(self, url, **kw):
+        if url.endswith("/robots.txt"):
+            return _Resp(200, "User-agent: *\nDisallow: /api/\n")
+        return _Resp(200, "ok")
+
+
+def test_api_con_terminos_pasa_y_sitio_comun_respeta_robots():
+    import pytest
+
+    from extractores.base import ExtractorEtico
+
+    ex = ExtractorEtico(pausa=0, sesion=_Sesion())
+    assert ex.get("https://overpass-api.de/api/interpreter").text == "ok"
+    with pytest.raises(PermissionError):
+        ex.get("https://ejemplo.com/api/precios")

@@ -1,5 +1,6 @@
 """Tablero de AbarrotesPOS para el dueño de la tienda.  streamlit run tablero/app.py"""
 
+import sys
 from pathlib import Path
 
 import pandas as pd
@@ -42,14 +43,36 @@ st.subheader("Días con evento vs días normales")
 st.dataframe(diarias.assign(evento=diarias["evento"].fillna("normal").replace("", "normal"))
              .groupby("evento")["venta"].agg(["mean", "count"]).round(0))
 
+st.subheader("Competencia alrededor de la tienda (OpenStreetMap)")
 tiendas_csv = PLATA / "tiendas_zona.csv"
-if tiendas_csv.exists():
-    tiendas = pd.read_csv(tiendas_csv)
-    if len(tiendas):
-        st.subheader("Competencia alrededor de la tienda (OpenStreetMap)")
-        st.map(tiendas, latitude="lat", longitude="lon")
-        st.caption(f"{int(tiendas['competencia_directa'].sum())} tiendas a menos de 500 m. "
-                   "Fuente: © colaboradores de OpenStreetMap (ODbL).")
+competencia_csv = ORO / "competencia_tienda_piloto.csv"
+tiendas = pd.read_csv(tiendas_csv) if tiendas_csv.exists() else pd.DataFrame()
+competencia = pd.read_csv(competencia_csv) if competencia_csv.exists() else pd.DataFrame()
+if len(tiendas):
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+    from extractores.config import RADIO_COMPETENCIA_M, TIENDA_PILOTO
+
+    cerca = set(competencia["osm_id"]) if len(competencia) else set()
+    puntos = tiendas[["osm_id", "lat", "lon"]].assign(
+        color=["#E8833A" if i in cerca else "#9AA0A6" for i in tiendas["osm_id"]], tam=25)
+    piloto = pd.DataFrame({"osm_id": ["piloto"], "lat": [TIENDA_PILOTO["lat"]],
+                           "lon": [TIENDA_PILOTO["lon"]], "color": ["#D62728"], "tam": [60]})
+    st.map(pd.concat([puntos, piloto]), latitude="lat", longitude="lon", color="color",
+           size="tam", zoom=14)
+    m1, m2, m3 = st.columns(3)
+    m1.metric(f"Tiendas a menos de {RADIO_COMPETENCIA_M} m", len(competencia))
+    m2.metric("Tiendas en Colima y Villa de Álvarez", len(tiendas))
+    if len(competencia):
+        m3.metric("La más cercana", f"{competencia['distancia_m'].min():,.0f} m")
+        st.dataframe(competencia[["nombre", "giro", "distancia_m"]], hide_index=True)
+    st.caption("🔴 tienda piloto · 🟠 competencia a menos de 500 m (unión espacial con "
+               "GeoPandas, EPSG:6372) · ⚪ resto de la zona. "
+               "Fuente: © colaboradores de OpenStreetMap (ODbL).")
+    if not TIENDA_PILOTO["coordenadas_confirmadas"]:
+        st.warning("Ubicación de la tienda piloto aproximada (centro de Villa de Álvarez).")
+else:
+    st.info("Aún no hay captura de OpenStreetMap: corre `python -m extractores.tiendas_osm` "
+            "y luego `python -m pipeline.ejecutar`.")
 
 st.caption("Linaje: cada cifra sale de data/oro y trae fuente, archivo de bronce y fecha de "
            "captura.")

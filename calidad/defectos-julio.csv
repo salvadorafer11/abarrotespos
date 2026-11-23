@@ -1,1 +1,3 @@
 numero,fecha,tipo,fase_introducido,fase_eliminado,minutos_correccion,defecto_origen,descripcion
+1,2026-11-23,diseño,diseño,pruebas,25,E2-arranque,"El extractor trataba el robots.txt de APIs públicas (Overpass, Open-Meteo) como prohibición: J1 fallaba con ""robots.txt no permite"". Se rigen por sus términos de uso (APIS_CON_TERMINOS); prueba de regresión test_api_con_terminos_pasa_y_sitio_comun_respeta_robots"
+2,2026-11-23,diseño,diseño,codificación,10,E2-arranque,"Las coordenadas de la tienda piloto solo se podían fijar con variable de entorno, así coordenadas_confirmadas nunca quedaba True en CI. Se agregan TIENDA_LAT/TIENDA_LON en config.py (J3)"

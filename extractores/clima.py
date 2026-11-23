@@ -31,7 +31,8 @@ def capturar(desde=config.CLIMA_DESDE, hasta=None, extractor=None):
     ruta = bronce.guardar(
         "open_meteo",
         r.content,
-        {"url": config.OPEN_METEO_ARCHIVO, "params": params, "licencia": "CC BY 4.0"},
+        {"url": config.OPEN_METEO_ARCHIVO, "params": params, "licencia": "CC BY 4.0",
+         "terminos": config.APIS_CON_TERMINOS["archive-api.open-meteo.com"]},
         subruta=hasta[:7],
         nombre=f"clima_{desde}_{hasta}",
     )
