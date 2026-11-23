@@ -1,0 +1,41 @@
+name: Captura programada
+
+# Clima (diario) y comercios de OpenStreetMap (semanal, lunes). Lo capturado se guarda en
+# bronce, se corre el pipeline y se sube a main con la bitacora (insumo de MTBF/MTTR).
+on:
+  schedule:
+    - cron: "17 13 * * *"   # 07:17 hora del centro, todos los dias
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  capturar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Clima (Open-Meteo)
+        run: python -m extractores.clima
+        env:
+          TDL_CONTACTO: ${{ vars.TDL_CONTACTO }}
+      - name: Comercios (OpenStreetMap, solo lunes o manual)
+        run: |
+          if [ "$(date -u +%u)" = "1" ] || [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            python -m extractores.tiendas_osm
+          fi
+      - name: Pipeline bronce -> oro
+        run: python -m pipeline.ejecutar
+      - name: Guardar en el repositorio
+        run: |
+          git config user.name "captura-automatica"
+          git config user.email "actions@users.noreply.github.com"
+          git add data/bronce data/oro data/plata/clima_diario.csv data/plata/tiendas_zona.csv calidad/
+          git diff --cached --quiet || git commit -m "captura: $(date -u +%F) (${{ job.status }})"
+          git push

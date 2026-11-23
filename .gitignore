@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+.env
+respaldos/
+# Plata de ventas pesa ~17 MB y se reconstruye desde bronce con `python -m pipeline.ejecutar`
+data/plata/ventas.csv
+laboratorio/resultados/_tmp/

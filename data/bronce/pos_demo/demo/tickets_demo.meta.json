@@ -1,0 +1,11 @@
+{
+  "descripcion": "tickets sinteticos semilla 42",
+  "generador": "pipeline/ventas_demo.py",
+  "fuente": "pos_demo",
+  "archivo": "tickets_demo.csv.gz",
+  "bytes": 11251892,
+  "sha256": "5f3bb5146ce4ae069cc532233a8e6f6bcdade82e815e7eea9fb06122bb92d5cb",
+  "capturado_utc": "2026-11-23T11:44:45.150073+00:00",
+  "user_agent": "TDL-AbarrotesPOS/0.2.0 (proyecto academico TecNM campus Colima; contacto: github.com/salvadorafer11/abarrotespos)",
+  "version_extractor": "0.2.0"
+}
