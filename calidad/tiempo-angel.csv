@@ -3,3 +3,5 @@ fecha,inicio,fin,interrupcion_min,fase,actividad
 2026-11-23,08:00,08:40,0,integracion,Crear repo abarrotespos en GitHub y subir main desde el bundle; invitar colaboradores
 2026-11-23,09:40,10:05,0,prueba,"Corridas del 2^3 (24), dos factores (18), matrices 2^4 y 2^(4-1), ANOVA y confirmacion en bloque nube-claude (con asistencia de IA)"
 2026-11-23,10:05,10:25,0,documentacion,Cuaderno laboratorio/experimento_E2.ipynb (con asistencia de IA)
+2026-11-23,10:00,10:30,0,integracion,"Bloque pc-angel (A2): correr experimento en PC, limpiar duplicados de corridas"
+2026-11-23,10:30,11:00,0,prueba,"Reanalisis con bloque (ANOVA lineal y log) y confirmacion - 48 corridas totales"

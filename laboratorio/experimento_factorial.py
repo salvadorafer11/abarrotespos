@@ -192,7 +192,15 @@ def analizar(archivo="corridas_2k3.csv"):
     from statsmodels.stats.anova import anova_lm
 
     d = pd.read_csv(RES / archivo)
-    bloque = " + C(bloque)" if d["bloque"].nunique() > 1 else ""
+    # Si hay varios bloques, se mete al modelo con una dummy explicita; usar C(bloque)
+    # chocaria con la columna llamada C (factor "formato") y patsy truena.
+    if d["bloque"].nunique() > 1:
+        dummies = pd.get_dummies(d["bloque"], prefix="blk", drop_first=True, dtype=float)
+        dummies.columns = [c.replace("-", "_").replace(" ", "_") for c in dummies.columns]
+        d = pd.concat([d, dummies], axis=1)
+        bloque = " + " + " + ".join(dummies.columns)
+    else:
+        bloque = ""
     modelo = smf.ols(f"tiempo_s ~ A * B * C{bloque}", data=d).fit()
     tabla = anova_lm(modelo, typ=2)
     efectos = (2 * modelo.params.drop("Intercept")).rename("efecto_s")  # efecto = 2 * coef
