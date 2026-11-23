@@ -1,0 +1,11 @@
+# 2026-11-23 ~14:57 · Tiempo de "python -m pipeline.ejecutar" (bronce -> plata -> oro)
+# Copia aislada del repositorio (git archive HEAD del commit 256d4f5) fuera del repo original;
+# Windows 11, Python 3.15.2, pandas 3.1.1. Medido con PowerShell Measure-Command, 3 corridas.
+# Volumen: 137867 renglones de ticket en plata, 0 en cuarentena (reporte-puerta.json).
+corrida,segundos
+1,1.90
+2,1.79
+3,1.74
+media,1.81
+# Prueba previa de recuperabilidad en la misma copia: se borraron data/plata, data/oro,
+# data/cuarentena y calidad/reporte-puerta.json; el pipeline termino con exit 0 y reconstruyo todo.
