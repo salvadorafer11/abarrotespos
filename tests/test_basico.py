@@ -50,3 +50,14 @@ def test_fraccionado_tiene_alias_d_igual_abc():
     assert len(p) == 8
     assert (p["D"] == p["A"] * p["B"] * p["C"]).all()
     assert len(ef.plan_2k(list("ABC"), 2)) == 16
+
+
+def test_csv_categorico_con_evento_vacio(tmp_path):
+    # Regresion del defecto 1 de Angel: dtype="category" en read_csv tronaba con "evento" vacio.
+    df = ventas_demo.generar("2025-01-01", "2026-10-31")
+    ruta = tmp_path / "t.csv"
+    df.to_csv(ruta, index=False)
+    leido = ef._leer(ruta, "csv", "categorico")
+    assert len(leido) == len(df)
+    assert str(leido["evento"].dtype) == "category"
+    assert "" in leido["evento"].cat.categories

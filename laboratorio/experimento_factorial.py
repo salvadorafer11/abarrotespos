@@ -70,8 +70,12 @@ def _escribir(df, ruta, formato, compresion):
 def _leer(ruta, formato, tipos):
     cat = ["producto", "categoria", "forma_pago", "evento", "fuente"]
     if formato == "csv":
-        dtype = {c: "category" for c in cat} if tipos == "categorico" else {c: str for c in cat}
-        return pd.read_csv(ruta, dtype=dtype)
+        # Se lee como texto y se convierte despues: con dtype="category" directo, pandas arma
+        # categorias por pedazos y truena cuando "evento" viene vacio en un pedazo (defecto 1).
+        df = pd.read_csv(ruta, dtype={c: str for c in cat}, keep_default_na=False)
+        if tipos == "categorico":
+            df[cat] = df[cat].astype("category")
+        return df
     df = pd.read_parquet(ruta)
     if tipos == "categorico":
         df[cat] = df[cat].astype("category")

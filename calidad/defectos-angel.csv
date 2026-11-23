@@ -1,1 +1,2 @@
 numero,fecha,tipo,fase_introducido,fase_eliminado,minutos_correccion,defecto_origen,descripcion
+1,2026-11-23,funcion,codificacion,prueba,10,,"experimento_factorial: leer el CSV con dtype=category tronaba (TypeError: dtype of categories must be the same) porque la columna evento viene vacia en casi todo el archivo y pandas arma las categorias por pedazos. Se lee como texto con keep_default_na=False y se convierte despues; se agrego prueba de regresion."
