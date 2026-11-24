@@ -1,0 +1,14 @@
+# Tema del tablero: claro y vivo (blanco azulado, tinta oscura y acentos zafiro).
+# Se lee al correr `streamlit run tablero/app.py` desde la raiz del repositorio.
+[theme]
+base = "light"
+primaryColor = "#4F6BED"
+backgroundColor = "#F4F6FB"
+secondaryBackgroundColor = "#EEF1F8"
+textColor = "#2A3145"
+borderColor = "#E1E5EF"
+font = "sans-serif"
+
+[client]
+# Oculta la barra de herramientas de Streamlit (boton "Deploy") para que el tablero se vea limpio.
+toolbarMode = "minimal"
