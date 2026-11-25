@@ -1,12 +1,12 @@
-# Tema del tablero: claro y vivo (blanco azulado, tinta oscura y acentos zafiro).
+# Tema del tablero: informe formal (papel marfil, tinta azul marino y acento de latón).
 # Se lee al correr `streamlit run tablero/app.py` desde la raiz del repositorio.
 [theme]
 base = "light"
-primaryColor = "#4F6BED"
-backgroundColor = "#F4F6FB"
-secondaryBackgroundColor = "#EEF1F8"
-textColor = "#2A3145"
-borderColor = "#E1E5EF"
+primaryColor = "#10243F"
+backgroundColor = "#E1E7F0"
+secondaryBackgroundColor = "#EEF2F7"
+textColor = "#283244"
+borderColor = "#E6E2D9"
 font = "sans-serif"
 
 [client]
