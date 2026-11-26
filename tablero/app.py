@@ -70,11 +70,11 @@ EVENTOS = {"normal": "Día normal", "cabalgata": "Cabalgata",
 # de acceso rápido o con su pestaña. clave -> (pestaña, icono, título, descripción).
 VISTAS = {
     "inicio": ("Resumen", "barras", "Resumen del mes",
-               "Indicadores, promedios por día y lo que más dejó."),
+               "Indicadores, promedios por día y productos con más ganancia."),
     "venta": ("Venta", "serie", "Venta por día",
               "Cómo se movió la venta día a día y cuál fue el mejor día."),
     "productos": ("Productos", "productos", "Productos y días fuertes",
-                  "Lo que más deja, los días que más venden y el efecto de los eventos."),
+                  "Productos con más ganancia, días que más venden y efecto de los eventos."),
     "competencia": ("Competencia", "mapa", "Competencia en la zona",
                     "Tiendas alrededor de la tienda piloto y la más cercana."),
     "clima": ("Clima y crédito", "clima", "Clima y crédito",
@@ -523,7 +523,8 @@ div.pie i { display: inline-block; width: .28rem; height: .28rem; margin: 0 .6re
   div.lectura { min-height: 4.6em; } }
 @media (max-width: 1600px) {
   div.tarjeta-nota { white-space: normal; min-height: 2.9em; } }
-@media (max-width: 1300px) { .usuario b { display: none; } }
+@media (max-width: 1300px) { .usuario b { display: none; }
+  div.tarjeta-titulo .texto { white-space: normal; } }
 @media (max-width: 1100px) { .kpis, .accesos { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .bienvenida { grid-template-columns: 1fr; } }
 @media (max-width: 900px) { .app-barra .pestanas { display: none; }
@@ -860,7 +861,7 @@ if vista == "inicio":
   </div>
   <div class="card">
     <div class="card-cabeza"><span class="chip-icono">{icono("productos")}</span>
-      <b>Lo que más dejó</b><span class="pastilla">Top 5 por ganancia</span></div>
+      <b>Productos con más ganancia</b><span class="pastilla">Top 5 del mes</span></div>
     <div class="top3">{filas_top}</div>
     <a class="ver" {ir("productos")}>Ver los 10 productos {icono("flecha", 2)}</a>
   </div>
@@ -937,7 +938,7 @@ elif vista == "productos":
     col_prod, col_dia, col_evento = st.columns(3, gap="medium")
     with col_prod, st.container(border=True, key="tarjeta_productos"):
         top = producto[producto["mes"] == str(ultimo_mes)].nlargest(10, "ganancia")
-        titulo_tarjeta("productos", "Productos que más dejan",
+        titulo_tarjeta("productos", "Productos con más ganancia",
                        f"Top 10 por ganancia en {MESES[ultimo_mes.month - 1]} "
                        f"{punto(*ESCALA_AZUL)}Menor a mayor", (top, "productos_top10.csv"))
         st.altair_chart(estilo(barras_horizontales(
