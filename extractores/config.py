@@ -67,7 +67,22 @@ DENUE_BASE = "https://www.inegi.org.mx/app/api/denue/v1/consulta"
 DENUE_SCIAN_ABARROTES = "461110"
 
 # --- PROFECO "Quien es Quien en los Precios" (precios de mercado; datos abiertos) -------
+# J6: el portal publica un .rar por año con un CSV por quincena. El extractor lee la página,
+# toma el año más reciente y guarda en bronce solo la zona elegida (el .rar pesa ~75 MB).
+QQP_PORTAL = "https://datos.profeco.gob.mx/index.php"
 QQP_CATALOGO = "https://datos.gob.mx/busca/dataset/quien-es-quien-en-los-precios"
+QQP_LICENCIA = "Términos de Libre Uso MX (datos abiertos del Gobierno de México)"
+# Zonas en orden de preferencia: (nombre, estado, municipios). PROFECO no registra precios en
+# Colima (revisado el 27-nov-2026 en las 20 quincenas de 2026), así que se usa la zona
+# metropolitana más cercana con datos. Si algún día aparece Colima, se toma esa sola.
+QQP_ZONAS = [
+    ("Colima y Villa de Álvarez", "Colima", ["Colima", "Villa de Álvarez"]),
+    ("Zona metropolitana de Guadalajara", "Jalisco",
+     ["Guadalajara", "Zapopan", "Tlaquepaque", "Tonalá", "Tlajomulco de Zúñiga"]),
+]
+# Giros que venden abarrotes (fuera farmacias, papelerías, electrodomésticos y pescaderías).
+QQP_GIROS = ["Supermercado / Tienda de Autoservicio", "Tienda de Conveniencia",
+             "Central de Abasto", "Mercados", "Tortillerías", "Panaderías"]
 
 
 def denue_token():

@@ -29,7 +29,7 @@ Proyecto Integrador TRUSTED DATA LAB (TecNM campus Colima): Ingeniería de Datos
 | Open-Meteo | Temperatura y lluvia diaria en la tienda | API sin llave, CC BY 4.0 | Extractor listo (`extractores/clima.py`) |
 | OpenStreetMap (Overpass) | Comercios de abarrotes en Colima y Villa de Álvarez | API sin llave, ODbL | Extractor listo (`extractores/tiendas_osm.py`) |
 | INEGI DENUE | Tiendas con giro SCIAN 461110 y coordenadas | API con token gratuito | Pendiente (Julio) |
-| PROFECO "Quién es Quién en los Precios" | Precios de la canasta en tiendas de Colima | Datos abiertos | Pendiente (Julio) |
+| PROFECO "Quién es Quién en los Precios" | Precios de 21 productos del catálogo en supermercados, tiendas de conveniencia y mercados | Datos abiertos (Libre Uso MX) | Extractor listo (`extractores/precios_profeco.py`). PROFECO no registra Colima: se usa la zona metropolitana de Guadalajara |
 
 ## Capas
 
@@ -47,6 +47,7 @@ pip install -r requirements-dev.txt
 python -m pipeline.ejecutar              # bronce -> plata -> oro
 python -m extractores.clima              # captura clima (red)
 python -m extractores.tiendas_osm        # captura comercios OSM (red)
+python -m extractores.precios_profeco    # captura precios PROFECO (red; necesita bsdtar, unrar o 7z)
 python -m pytest -q && ruff check .
 streamlit run tablero/app.py
 python -m laboratorio.experimento_factorial correr --replicas 3   # experimento E2

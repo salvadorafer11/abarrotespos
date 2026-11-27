@@ -1,0 +1,35 @@
+{
+  "url": "https://datos.profeco.gob.mx/docs/qqp/2026.rar",
+  "portal": "https://datos.profeco.gob.mx/index.php",
+  "catalogo": "https://datos.gob.mx/busca/dataset/quien-es-quien-en-los-precios",
+  "licencia": "Términos de Libre Uso MX (datos abiertos del Gobierno de México)",
+  "archivo_origen": "2026.rar",
+  "archivo_origen_sha256": "3c29fb373068330db582131edf46648bddde750bfbabd0f3b29bd3d7adc566ff",
+  "archivo_origen_bytes": 74665761,
+  "archivo_origen_modificado": "Wed, 25 Nov 2026 22:44:50 GMT",
+  "miembros": [
+    "2026/10-2026_Q1.csv",
+    "2026/10-2026_Q2.csv"
+  ],
+  "mes": "2026-10",
+  "zona": "Zona metropolitana de Guadalajara",
+  "estado": "Jalisco",
+  "municipios": [
+    "Guadalajara",
+    "Zapopan",
+    "Tlaquepaque",
+    "Tonalá",
+    "Tlajomulco de Zúñiga"
+  ],
+  "zonas_sin_datos": [
+    "Colima y Villa de Álvarez"
+  ],
+  "nota": "solo las filas de la zona; el .rar completo se identifica por su SHA-256",
+  "fuente": "profeco_qqp",
+  "archivo": "qqp_zona_metropolitana_de_guadalajara_2026-10.csv.gz",
+  "bytes": 13591752,
+  "sha256": "ccaeddb33a9d8482548b0270c7a9b2f03efec845349eb58ab73d56c4423a6714",
+  "capturado_utc": "2026-11-27T19:03:35.698908+00:00",
+  "user_agent": "TDL-AbarrotesPOS/0.2.0 (proyecto academico TecNM campus Colima; contacto: github.com/salvadorafer11/abarrotespos)",
+  "version_extractor": "0.2.0"
+}

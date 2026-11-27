@@ -1,6 +1,6 @@
 name: Captura programada
 
-# Clima (diario) y comercios de OpenStreetMap (semanal, lunes). Lo capturado se guarda en
+# Clima (diario), comercios de OpenStreetMap y precios de PROFECO (semanal, lunes). Lo capturado se guarda en
 # bronce, se corre el pipeline y se sube a main con la bitacora (insumo de MTBF/MTTR).
 on:
   schedule:
@@ -30,12 +30,22 @@ jobs:
           if [ "$(date -u +%u)" = "1" ] || [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             python -m extractores.tiendas_osm
           fi
+      # PROFECO publica un .rar al mes (RAR5); bsdtar (libarchive-tools) lo abre.
+      - name: Precios de mercado (PROFECO QQP, solo lunes o manual)
+        run: |
+          if [ "$(date -u +%u)" = "1" ] || [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            sudo apt-get install -y -qq libarchive-tools
+            python -m extractores.precios_profeco
+          fi
+        env:
+          TDL_CONTACTO: ${{ vars.TDL_CONTACTO }}
       - name: Pipeline bronce -> oro
         run: python -m pipeline.ejecutar
       - name: Guardar en el repositorio
         run: |
           git config user.name "captura-automatica"
           git config user.email "actions@users.noreply.github.com"
-          git add data/bronce data/oro data/plata/clima_diario.csv data/plata/tiendas_zona.csv calidad/
+          git add data/bronce data/oro data/plata/clima_diario.csv data/plata/tiendas_zona.csv \
+            data/plata/precios_mercado.csv calidad/
           git diff --cached --quiet || git commit -m "captura: $(date -u +%F) (${{ job.status }})"
           git push

@@ -78,6 +78,25 @@ python -m pipeline.linaje data/plata/clima_diario.csv 0
 ```
 → `data/bronce/open_meteo/2026-11/clima_2025-01-01_2026-11-18.json.gz`, SHA-256 `62dbc1f7…2b48` recalculado e igual al del `.meta.json` → `"integro": true` (687 días, CC BY 4.0).
 
+## Ejemplo 6 · Comparativo de precios → captura real de PROFECO (27-nov-2026)
+
+```bash
+python -m pipeline.linaje data/oro/comparativo_precios.csv 0
+```
+```json
+{
+  "tabla": "data/oro/comparativo_precios.csv (fila 0)",
+  "fuente": "profeco_qqp",
+  "capturado_utc_en_tabla": "2026-11-27T19:03:35.698908+00:00",
+  "bronce": "data/bronce/profeco_qqp/2026-10/qqp_zona_metropolitana_de_guadalajara_2026-10.csv.gz",
+  "capturado_utc_en_meta": "2026-11-27T19:03:35.698908+00:00",
+  "sha256_meta": "ccaeddb33a9d8482548b0270c7a9b2f03efec845349eb58ab73d56c4423a6714",
+  "sha256_recalculado": "ccaeddb33a9d8482548b0270c7a9b2f03efec845349eb58ab73d56c4423a6714",
+  "integro": true
+}
+```
+Fuente especializada de precios (`profeco_qqp`, J6). El archivo oficial de PROFECO (`2026.rar`, 75 MB) no se guarda completo: en bronce queda solo la zona usada (44,844 precios de octubre de 2026), y su `.meta.json` trae además el **SHA-256 del `.rar` completo** (`archivo_origen_sha256: 3c29fb37…66ff`), su fecha de modificación y las quincenas leídas. Así se puede rastrear un precio del tablero hasta el archivo oficial aunque PROFECO lo reemplace. `data/oro/precios_por_cadena.csv` y `data/plata/precios_mercado.csv` conservan las mismas tres columnas de linaje.
+
 ## Notas
 - La competencia a 500 m queda en 0 mientras se usan las coordenadas aproximadas (centro de Villa de Álvarez): la tienda OSM más cercana a ese punto está a 564 m. Con las coordenadas reales de El Amiguito (se toman en la visita, J3) basta con volver a correr `python -m pipeline.ejecutar`.
 - Las ventas son **demostración** (`pos_demo`) hasta que el dueño de El Amiguito comparta las reales (`pos_cliente`); el linaje funciona igual con ambas.
