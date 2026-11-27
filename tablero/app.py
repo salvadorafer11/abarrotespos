@@ -28,6 +28,8 @@ ORO = RAIZ / "data" / "oro"
 PLATA = RAIZ / "data" / "plata"
 sys.path.insert(0, str(RAIZ))
 from extractores.config import RADIO_COMPETENCIA_M, TIENDA_PILOTO  # noqa: E402
+from tablero.buscador import buscar, documento, hubo_correccion  # noqa: E402
+from tablero.productos import ficha, imagen, nombre  # noqa: E402
 
 # --- PALETA: un solo azul de acento sobre blanco y gris pizarra -------------------------------
 TINTA = "#0F172A"  # títulos y cifras
@@ -77,6 +79,8 @@ VISTAS = {
               "Cómo se movió la venta día a día y cuál fue el mejor día."),
     "productos": ("Productos", "productos", "Productos y días fuertes",
                   "Productos con más ganancia, días que más venden y efecto de los eventos."),
+    "precios": ("Precios", "precios", "Precios del mercado",
+                "Tus precios contra los de PROFECO y dónde conviene surtir."),
     "competencia": ("Competencia", "mapa", "Competencia en la zona",
                     "Tiendas alrededor de la tienda piloto y la más cercana."),
     "clima": ("Clima y crédito", "clima", "Clima y crédito",
@@ -122,6 +126,11 @@ ICONOS = {
                 ".768-2.015 1.837-2.175a48.041 48.041 0 0 1 1.913-.247m10.5 0a48.536 48.536 0 0 "
                 "0-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125"
                 " 1.125v3.659M18 10.5h.008v.008H18V10.5Zm-3 0h.008v.008H15V10.5Z",
+    "precios": "M9.568 3H5.25A2.25 2.25 0 0 0 3 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 "
+               "9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 0 0 5.223-5.223c.542-.827.369"
+               "-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 0 0 9.568 3ZM6 6h.008v.008H6V6Z",
+    "buscar": "m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 "
+              "10.607Z",
     "sube": "m4.5 19.5 15-15m0 0H8.25m11.25 0v11.25",
     "baja": "m4.5 4.5 15 15m0 0V8.25m0 11.25H8.25",
     "tienda": "M13.5 21v-7.5a.75.75 0 0 1 .75-.75h3a.75.75 0 0 1 .75.75V21m-4.5 0H2.36m11.14 0H18"
@@ -156,6 +165,11 @@ ICONOS = {
 }
 
 FUENTES_URL = "https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400..800&display=swap"
+# Lupa azul de la caja de búsqueda (fondo del campo; Streamlit no deja poner un icono dentro).
+LUPA = "data:image/svg+xml;utf8," + quote(
+    '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" '
+    f'stroke="#2563EB"><path stroke-linecap="round" stroke-linejoin="round" '
+    f'd="{ICONOS["buscar"]}"/></svg>')
 
 ESTILOS = """
 <style>
@@ -328,13 +342,21 @@ div[class*="st-key-tarjeta"]:hover { box-shadow: var(--sombra-alta); }
   background: var(--azul); animation: pulso 2.4s ease-out infinite; }
 @keyframes pulso { 0% { box-shadow: 0 0 0 0 rgba(37, 99, 235, .45); }
   80%, 100% { box-shadow: 0 0 0 .4rem rgba(37, 99, 235, 0); } }
-/* Lista de productos: posición, nombre, barra de proporción y ganancia */
-.top3 { display: flex; flex-direction: column; gap: .7rem; margin-top: 1.1rem; }
-.fila { display: grid; align-items: center; gap: .75rem;
-  grid-template-columns: 1.6rem minmax(0, 1.5fr) minmax(0, 1fr) 4.5rem; }
-.fila .pos { width: 1.6rem; height: 1.6rem; border-radius: .5rem; display: grid;
-  place-items: center; font-size: .75rem; font-weight: 800; color: var(--azul);
-  background: var(--azul-claro); }
+/* Ficha de producto: su dibujo en su color sobre el mismo color muy claro; el número
+   (si lo lleva) es su lugar en la lista */
+.ficha { position: relative; flex: none; width: 2.35rem; height: 2.35rem; border-radius: .75rem;
+  display: grid; place-items: center; color: var(--c);
+  background: color-mix(in srgb, var(--c) 11%, #FFFFFF);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--c) 16%, transparent); }
+.ficha svg { width: 1.45rem; height: 1.45rem; }
+.ficha .rango { position: absolute; top: -.4rem; left: -.4rem; min-width: 1.05rem;
+  height: 1.05rem; padding: 0 .2rem; border-radius: 9999px; display: grid; place-items: center;
+  font-size: .62rem; font-weight: 800; color: #FFFFFF; background: var(--tinta);
+  box-shadow: 0 0 0 2px var(--hoja); }
+/* Lista de productos: ficha, nombre, barra de proporción y ganancia */
+.top3 { display: flex; flex-direction: column; gap: .6rem; margin-top: 1.1rem; }
+.fila { display: grid; align-items: center; gap: .8rem;
+  grid-template-columns: 2.35rem minmax(0, 1.5fr) minmax(0, 1fr) 4.5rem; }
 .fila .nom { font-size: .88rem; font-weight: 600; color: var(--texto); white-space: nowrap;
   overflow: hidden; text-overflow: ellipsis; }
 .fila .prop { height: .45rem; border-radius: 9999px; background: #EEF3FF; overflow: hidden; }
@@ -348,7 +370,7 @@ div[class*="st-key-tarjeta"]:hover { box-shadow: var(--sombra-alta); }
 .ver svg { width: 1rem; height: 1rem; }
 
 /* Accesos rápidos del inicio: una tarjeta por vista, con un dato clave y "Entrar" */
-.accesos { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.25rem; }
+.accesos { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 1.25rem; }
 .acceso { display: flex; flex-direction: column; gap: .35rem; padding: 1.3rem 1.3rem 1.15rem;
   color: var(--texto) !important; text-decoration: none !important;
   transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease; }
@@ -413,18 +435,83 @@ div[class*="st-key-tarjeta"]:hover { box-shadow: var(--sombra-alta); }
 .h-mal { --c: #E11D48; --f: #FFF1F2; }
 .cambios { display: flex; flex-direction: column; gap: .6rem; margin-top: 1.1rem; }
 .fila-cambio { display: grid; align-items: center; gap: .75rem; padding: .55rem .2rem;
-  grid-template-columns: 1.6rem minmax(0, 1fr) auto 5.2rem;
+  grid-template-columns: 2.35rem minmax(0, 1fr) auto 5.2rem;
   border-bottom: 1px solid var(--borde); }
 .fila-cambio:last-child { border-bottom: 0; }
-.fila-cambio .pos { width: 1.6rem; height: 1.6rem; border-radius: .5rem; display: grid;
-  place-items: center; color: var(--c); background: var(--f); }
-.fila-cambio .pos svg { width: .9rem; height: .9rem; }
 .fila-cambio .nom { font-size: .88rem; font-weight: 600; color: var(--texto); white-space: nowrap;
   overflow: hidden; text-overflow: ellipsis; }
 .fila-cambio .por-dia { font-size: .8rem; color: var(--texto-tenue);
   font-variant-numeric: tabular-nums; }
 .fila-cambio .cambio { justify-self: end; }
+.tabla-precios td.prod { display: flex; align-items: center; gap: .75rem; }
 .sin-cambios { margin: 1.1rem 0 0; font-size: .88rem; color: var(--texto-tenue); }
+
+/* Precios del mercado: tabla de la mejor alternativa por producto */
+.minis-precios { margin: 0; }
+.tabla-envoltura { overflow-x: auto; margin: .4rem 0 .6rem; border: 1px solid var(--borde);
+  border-radius: 1rem; }
+/* En pantallas chicas la tabla conserva su ancho y se desliza dentro de su marco */
+.tabla-precios { width: 100%; min-width: 62rem; border-collapse: collapse; font-size: .86rem; }
+.tabla-precios td:first-child { min-width: 14rem; }
+.tabla-precios td:nth-child(3), .tabla-precios td:last-child { min-width: 13rem; }
+.tabla-precios th { text-align: left; font-size: .74rem; font-weight: 700; letter-spacing: .02em;
+  text-transform: uppercase; color: var(--texto-tenue); background: #F6F9FF;
+  padding: .7rem .9rem; white-space: nowrap; border-bottom: 1px solid var(--borde); }
+.tabla-precios td { padding: .7rem .9rem; vertical-align: middle; color: var(--texto);
+  border-bottom: 1px solid var(--borde); }
+.tabla-precios tr:last-child td { border-bottom: 0; }
+.tabla-precios tbody tr:hover td { background: #F8FAFF; }
+.tabla-precios td b { font-weight: 700; color: var(--tinta); }
+.tabla-precios td small { display: block; margin-top: .1rem; font-size: .76rem;
+  color: var(--texto-tenue); }
+.tabla-precios .num { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums;
+  font-weight: 700; color: var(--tinta); }
+.tabla-precios .cambio { white-space: nowrap; }
+.cambio.neutro { color: var(--texto-suave); background: #EEF2F8; }
+.tabla-precios .propia { font-size: .8rem; color: var(--texto-suave); }
+.tabla-precios .nada { color: var(--texto-tenue); }
+.st-key-tarjeta_alternativas div.lectura .txt { white-space: normal; }
+
+/* Buscador de productos: caja de búsqueda, ficha del resultado y "También" */
+.st-key-buscar_precio { margin: .35rem 0 .2rem; }
+.st-key-buscar_precio [data-testid="stTextInputRootElement"] {
+  border: 1px solid var(--azul-borde) !important; border-radius: .9rem !important;
+  background: #F6F9FF url("__LUPA__") no-repeat .95rem center / 1.15rem !important;
+  min-height: 3rem; transition: border-color .2s ease, box-shadow .2s ease; }
+.st-key-buscar_precio [data-testid="stTextInputRootElement"]:focus-within {
+  border-color: var(--azul) !important; box-shadow: 0 0 0 4px rgba(37, 99, 235, .14); }
+.st-key-buscar_precio input { background: transparent !important; padding-left: 2.7rem !important;
+  font-size: .98rem; font-weight: 600; color: var(--tinta); }
+.st-key-buscar_precio input::placeholder { color: var(--texto-tenue); font-weight: 500; }
+.st-key-buscar_precio [data-testid="InputInstructions"] { display: none; }
+.resultado-cabeza { display: flex; align-items: center; gap: 1rem; margin: 1.1rem 0 1rem; }
+.resultado-cabeza > div { min-width: 0; }
+.resultado-cabeza b { display: block; font-size: 1.25rem; font-weight: 800; color: var(--tinta);
+  letter-spacing: -.01em; }
+.resultado-cabeza small { display: block; margin-top: .1rem; font-size: .84rem;
+  color: var(--texto-tenue); }
+.quisiste { display: inline-block; margin-top: .35rem; font-size: .8rem;
+  color: var(--texto-suave); }
+.quisiste b { display: inline; font-size: inherit; color: var(--azul); }
+.ficha.grande { width: 3.5rem; height: 3.5rem; border-radius: 1.05rem; }
+.ficha.grande svg { width: 2.2rem; height: 2.2rem; }
+.minis.cuatro { grid-template-columns: repeat(4, minmax(0, 1fr)); margin: 0 0 .8rem; }
+.minis.cuatro .mini b { font-size: 1.35rem; }
+.mini small { display: block; margin-top: .25rem; font-size: .78rem; line-height: 1.45;
+  color: var(--texto-suave); }
+.mini small .cambio { margin-right: .25rem; }
+.otros { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; margin-top: .2rem;
+  font-size: .82rem; color: var(--texto-tenue); }
+.otro { display: inline-flex; align-items: center; gap: .45rem;
+  padding: .25rem .75rem .25rem .25rem; border-radius: 9999px; background: #F6F9FF;
+  border: 1px solid var(--borde); font-weight: 700; color: var(--texto) !important;
+  text-decoration: none !important;
+  transition: border-color .2s ease, background .2s ease; }
+.otro:hover { border-color: var(--azul-borde); background: var(--azul-claro); }
+.otro .ficha { width: 1.7rem; height: 1.7rem; border-radius: 9999px; }
+.otro .ficha svg { width: 1.05rem; height: 1.05rem; }
+.sin-resultados { margin: .9rem 0 .2rem; font-size: .9rem; color: var(--texto-suave); }
+.filtrada { margin: .2rem 0 .5rem; font-size: .84rem; font-weight: 600; color: var(--azul); }
 
 /* Anterior y siguiente al final de cada vista */
 .pasos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem;
@@ -503,9 +590,9 @@ div.lectura b { font-weight: 700; color: var(--tinta); }
 .mini { border-radius: .95rem; padding: .8rem 1rem; background: #E8F1FF; --punto: #3B82F6; }
 .mini:nth-child(2) { background: #ECEEFF; --punto: #4F46E5; }
 .mini:nth-child(3) { background: #F2F5F9; --punto: #94A3B8; }
-.mini span { display: flex; align-items: center; gap: .45rem; font-size: .78rem;
+.mini > span { display: flex; align-items: center; gap: .45rem; font-size: .78rem;
   font-weight: 600; color: var(--texto-suave); }
-.mini span::before { content: ""; flex: none; width: .42rem; height: .42rem;
+.mini > span::before { content: ""; flex: none; width: .42rem; height: .42rem;
   border-radius: 9999px; background: var(--punto); }
 .mini b { display: block; margin-top: .3rem; font-size: 1.6rem; font-weight: 800;
   color: var(--tinta); font-variant-numeric: tabular-nums; }
@@ -580,22 +667,56 @@ div.pie i { display: inline-block; width: .28rem; height: .28rem; margin: 0 .6re
 @media (max-width: 1600px) {
   div.tarjeta-nota { white-space: normal; min-height: 2.9em; } }
 @media (max-width: 1300px) { .usuario b { display: none; }
-  div.tarjeta-titulo .texto { white-space: normal; } }
-/* Con 6 pestañas la barra no cabe: fuera el estado (el aviso del resumen ya lo dice) y
+  div.tarjeta-titulo .texto { white-space: normal; }
+  .accesos { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+/* Con 7 pestañas la barra no cabe: fuera el estado (el aviso del resumen ya lo dice) y
    pestañas más compactas */
-@media (max-width: 1200px) { .app-barra .estado { display: none; } }
-@media (max-width: 1100px) { .pestanas a { padding: .45rem .75rem; font-size: .84rem; } }
-@media (max-width: 1100px) { .kpis, .accesos { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+@media (max-width: 1600px) { .app-barra .estado { display: none; } }
+@media (max-width: 1300px) { .pestanas a { padding: .45rem .8rem; font-size: .84rem; } }
+@media (max-width: 1100px) { .pestanas a { padding: .42rem .6rem; font-size: .8rem; }
+  .app-barra .logo > span:last-child { display: none; } }
+@media (max-width: 1100px) { .kpis, .accesos, .minis.cuatro {
+    grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .bienvenida { grid-template-columns: 1fr; } }
-@media (max-width: 900px) { .app-barra .pestanas { display: none; }
+@media (max-width: 900px) {
+  .app-barra { flex-wrap: wrap; row-gap: .9rem; margin-bottom: 1.5rem; }
+  .app-barra .pestanas { order: 3; flex: 1 0 100%; overflow-x: auto; scrollbar-width: none;
+    border-radius: 1rem; scroll-snap-type: x proximity; }
+  .app-barra .pestanas::-webkit-scrollbar { display: none; }
+  .app-barra .pestanas a { scroll-snap-align: center; padding: .45rem .85rem;
+    font-size: .84rem; }
+  .app-barra .logo > span:last-child { display: block; }
   .duo { grid-template-columns: 1fr; } }
 @media (max-width: 640px) {
   .block-container { padding: 1rem 1rem 2rem; }
   .app-barra .estado, .usuario b { display: none; }
   .saludo .hola { font-size: 1.75rem; }
-  .kpis, .minis, .accesos, .pasos, .hallazgos { grid-template-columns: 1fr; }
-  .fila-cambio { grid-template-columns: 1.6rem minmax(0, 1fr) 5.2rem; }
+  .kpis, .minis, .minis.cuatro, .accesos, .pasos, .hallazgos { grid-template-columns: 1fr; }
+  .resultado-cabeza .pastilla { display: none; }
+  .fila-cambio { grid-template-columns: 2.35rem minmax(0, 1fr) 5.2rem; }
   .fila-cambio .por-dia { display: none; }
+  .tabla-envoltura { border: 0; overflow: visible; }
+  .tabla-precios { min-width: 0; }
+  .tabla-precios thead { display: none; }
+  /* Orden en la tarjeta: producto; tu costo y precio lado a lado; dónde; si conviene */
+  .tabla-precios tr { display: grid; grid-template-columns: 1fr 1fr; gap: .6rem .9rem;
+    padding: .9rem 1rem; margin-bottom: .7rem; border: 1px solid var(--borde);
+    border-radius: 1rem; }
+  .tabla-precios tbody tr:hover td { background: transparent; }
+  .tabla-precios td { display: block; padding: 0; border: 0; min-width: 0 !important; }
+  .tabla-precios td.prod { grid-column: 1 / -1; display: flex; }
+  .tabla-precios td:nth-child(2) { order: 1; } .tabla-precios td:nth-child(4) { order: 2; }
+  .tabla-precios td:nth-child(3) { order: 3; grid-column: 1 / -1; }
+  .tabla-precios td.conviene { order: 4; grid-column: 1 / -1; }
+  .tabla-precios td:last-child { order: 5; grid-column: 1 / -1; }
+  .tabla-precios td.conviene[data-etiqueta]::before, .tabla-precios td.sin-propia {
+    display: none; }
+  .fila { grid-template-columns: 2.35rem minmax(0, 1fr) auto; }
+  .fila .prop { display: none; }
+  .tabla-precios td[data-etiqueta]::before { content: attr(data-etiqueta); display: block;
+    margin-bottom: .15rem; font-size: .68rem; font-weight: 700; letter-spacing: .03em;
+    text-transform: uppercase; color: var(--texto-tenue); }
+  .tabla-precios .num { text-align: left; }
   .paso.sig { grid-column: auto; }
   .vista-titulo b { font-size: 1.5rem; } .vista-titulo .pastilla { display: none; }
   .aviso { flex-direction: column; align-items: flex-start; gap: .5rem; }
@@ -619,15 +740,16 @@ div.pie i { display: inline-block; width: .28rem; height: .28rem; margin: 0 .6re
     background: #FFFFFF !important; }
   .card, .aviso, div[class*="st-key-tarjeta"] { box-shadow: none !important;
     animation: none !important; break-inside: avoid; }
-  .cta, .logo-cuadro, .avatar, .tile, .mini, .cambio, .kpi-icono, .hallazgo, .fila-cambio .pos {
+  .cta, .logo-cuadro, .avatar, .tile, .mini, .cambio, .kpi-icono, .hallazgo, .ficha {
     -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .barra, .pestanas, .ver, .volver, .pasos, .accesos, .pie .arriba, .st-key-rango_venta, .imprimir,
   [data-testid="stElementToolbar"], .tarjeta-titulo .accion { display: none !important; }
   div.bloque { break-after: avoid; } }
 </style>
-""".replace("__FUENTES__", FUENTES_URL)
+""".replace("__FUENTES__", FUENTES_URL).replace("__LUPA__", LUPA)
 
-st.set_page_config(page_title="AbarrotesPOS", layout="wide")
+st.set_page_config(page_title="AbarrotesPOS", page_icon=":material/storefront:",
+                   layout="wide")
 st.markdown(ESTILOS, unsafe_allow_html=True)
 
 
@@ -743,12 +865,27 @@ def resalte(campo):
     return sel, alt.when(sel).then(alt.value(1.0)).otherwise(alt.value(0.35))
 
 
-def barras_horizontales(datos, valor, nombre, tooltip, color):
+def con_fichas(datos, campo="producto"):
+    """Columna "ficha" con el dibujo de cada producto y el nombre ya con acentos."""
+    return datos.assign(ficha=datos[campo].map(imagen), **{campo: datos[campo].map(nombre)})
+
+
+def fichas_en_eje(datos, eje_y):
+    """Capa con el dibujo de cada producto a la izquierda de su nombre (el eje deja el hueco
+    con labelPadding)."""
+    return alt.Chart(datos).mark_image(width=20, height=20, align="center",
+                                       baseline="middle").encode(
+        y=eje_y, x=alt.value(-16), url="ficha:N")
+
+
+def barras_horizontales(datos, valor, nombre, tooltip, color, fichas=False):
     """Barras horizontales de mayor a menor con su cifra al final (deja aire a la derecha),
-    renglones alternos sombreados y un rombo ámbar en el primer lugar."""
+    renglones alternos sombreados y un rombo ámbar en el primer lugar. Con fichas=True, cada
+    renglón lleva el dibujo de su producto (columna "ficha", ver con_fichas)."""
     datos = datos.sort_values(valor, ascending=False).reset_index(drop=True)
     tope = datos[valor].max() * 1.22
-    eje_y = alt.Y(f"{nombre}:N", sort=list(datos[nombre]), title=None)
+    eje_y = alt.Y(f"{nombre}:N", sort=list(datos[nombre]), title=None,
+                  axis=alt.Axis(labelPadding=32) if fichas else alt.Undefined)
     base = alt.Chart(datos).encode(
         x=alt.X(f"{valor}:Q", title=None, axis=alt.Axis(format="$,.0f"),
                 scale=alt.Scale(domainMax=tope)),
@@ -759,8 +896,9 @@ def barras_horizontales(datos, valor, nombre, tooltip, color):
         shape="diamond", filled=True, size=90, color=AMBAR, stroke="white", strokeWidth=1.5,
         opacity=1).encode(y=eje_y, x=alt.datum(datos[valor].max() * .035))
     sel, opacidad = resalte(nombre)
-    return (renglones + base.mark_bar(cornerRadiusEnd=5).encode(color=color, opacity=opacidad)
-            .add_params(sel) + primero + cifras(base, valor))
+    capas = (renglones + base.mark_bar(cornerRadiusEnd=5).encode(color=color, opacity=opacidad)
+             .add_params(sel) + primero + cifras(base, valor))
+    return capas + fichas_en_eje(datos, eje_y) if fichas else capas
 
 
 def estilo(grafica, alto):
@@ -807,6 +945,8 @@ producto = pd.read_csv(ORO / "ventas_producto_mes.csv")
 tiendas = leer(PLATA / "tiendas_zona.csv")
 competencia = leer(ORO / "competencia_tienda_piloto.csv")
 fiados = leer(ORO / "fiados_por_cliente.csv")
+comparativo = leer(ORO / "comparativo_precios.csv")
+cadenas = leer(ORO / "precios_por_cadena.csv")
 
 ultimo_mes = diarias["fecha"].max().to_period("M")
 mes = diarias[diarias["fecha"].dt.to_period("M") == ultimo_mes]
@@ -904,7 +1044,8 @@ if vista == "inicio":
                  ("t-gris", "Tickets por día", f"{tickets / dias_mes:,.0f}")]
     top5 = producto[producto["mes"] == str(ultimo_mes)].nlargest(5, "ganancia")
     filas_top = "".join(
-        f'<div class="fila"><span class="pos">{n}</span><span class="nom">{p["producto"]}</span>'
+        f'<div class="fila">{ficha(p["producto"], n)}'
+        f'<span class="nom">{nombre(p["producto"])}</span>'
         f'<span class="prop"><i style="width:{p["ganancia"] / top5["ganancia"].max() * 100:.0f}%">'
         f'</i></span><b>{pesos(p["ganancia"])}</b></div>'
         for n, (_, p) in enumerate(top5.iterrows(), start=1))
@@ -933,9 +1074,12 @@ if vista == "inicio":
     # Accesos rápidos: cada uno abre su vista con solo esa información.
     bloque("accesos", "Accesos rápidos",
            '<span class="pastilla">Toca una tarjeta para entrar</span>')
-    lider = top5.iloc[0]["producto"] if len(top5) else "—"
+    lider = nombre(top5.iloc[0]["producto"]) if len(top5) else "—"
+    caros = (int((comparativo["diferencia_pct"] > 5).sum())
+             if "diferencia_pct" in comparativo else 0)
     datos_acceso = {"venta": f"Mejor día del mes: {pesos(mes['venta'].max() if len(mes) else 0)}",
                     "productos": f"Líder: {lider}",
+                    "precios": f"Más caro en {caros} productos",
                     "competencia": f"{len(tiendas)} tiendas en la zona",
                     "clima": f"{len(fiados)} clientes con fiado"}
     html('<div class="accesos">' + "".join(
@@ -973,11 +1117,11 @@ elif vista == "informe":
         evento = mejor["evento"] if isinstance(mejor["evento"], str) else ""
         contexto = (f", día de {EVENTOS.get(evento, evento).lower()}" if evento else
                     ", día de quincena" if f.day in (1, 15, 16, 30, 31) else
-                    ", en fin de semana" if f.dayofweek >= 5 else "")
+                    ", en fin de semana" if f.weekday() >= 5 else "")
         hallazgos = [("h-neutro", "semana",
-                      f"Tu mejor día fue el <b>{DIAS_LARGOS[f.dayofweek]} {f.day}</b>{contexto}, "
+                      f"Tu mejor día fue el <b>{DIAS_LARGOS[f.weekday()]} {f.day}</b>{contexto}, "
                       f"con <b>{pesos(mejor['venta'])}</b>.")]
-        finde = mes["fecha"].dt.dayofweek >= 5
+        finde = mes["fecha"].dt.day_of_week >= 5
         if finde.any() and (~finde).any():
             extra = (mes.loc[finde, "venta"].mean() / mes.loc[~finde, "venta"].mean() - 1) * 100
             hallazgos.append(("h-neutro", "barras",
@@ -1093,10 +1237,11 @@ elif vista == "informe":
         tarjetas_cambio = []
         for titulo, flecha, tono, clase, tabla, vacia in listas:
             filas = "".join(
-                f'<div class="fila-cambio {tono}"><span class="pos">{icono(flecha, 2.2)}</span>'
-                f'<span class="nom">{nombre}</span><span class="por-dia">'
+                f'<div class="fila-cambio {tono}">{ficha(clave)}'
+                f'<span class="nom">{nombre(clave)}</span><span class="por-dia">'
                 f'{pesos(p["ahora"])} por día</span><span class="cambio {clase}">'
-                f'{p["pct"]:+.1f} %</span></div>' for nombre, p in tabla.iterrows())
+                f'{icono(flecha, 2.2)}{abs(p["pct"]):.1f} %</span></div>'
+                for clave, p in tabla.iterrows())
             tarjetas_cambio.append(
                 f'<div class="card"><div class="card-cabeza"><span class="chip-icono">'
                 f'{icono(flecha)}</span><b>{titulo}</b><span class="pastilla">Venta por día vs '
@@ -1165,13 +1310,14 @@ elif vista == "productos":
                        f"Top 10 por ganancia en {MESES[ultimo_mes.month - 1]} "
                        f"{punto(*ESCALA_AZUL)}Menor a mayor", (top, "productos_top10.csv"))
         st.altair_chart(estilo(barras_horizontales(
-            top, "ganancia", "producto",
+            con_fichas(top), "ganancia", "producto",
             [alt.Tooltip("producto:N", title="Producto"), dinero("ganancia", "Ganancia"),
              alt.Tooltip("piezas:Q", title="Piezas", format=",")],
-            alt.Color("ganancia:Q", legend=None, scale=alt.Scale(range=ESCALA_AZUL))), ALTO_FILA))
+            alt.Color("ganancia:Q", legend=None, scale=alt.Scale(range=ESCALA_AZUL)),
+            fichas=True), ALTO_FILA))
         if len(top):
             lider = top.iloc[0]
-            lectura(f"<b>{lider['producto']}</b> deja el "
+            lectura(f"<b>{nombre(lider['producto'])}</b> deja el "
                     f"<b>{lider['ganancia'] / top['ganancia'].sum() * 100:.0f} %</b> "
                     "de la ganancia del top 10")
 
@@ -1219,6 +1365,250 @@ elif vista == "productos":
             lectura(f"La <b>{pico['nombre'].lower()}</b> vende "
                     f"<b>{pico['promedio'] / normal.iloc[0]:.1f} veces</b> lo de un día normal")
     pasos("productos")
+
+# --- Vista: precios del mercado (PROFECO) ---------------------------------------------
+# Sale de data/oro/comparativo_precios.csv y precios_por_cadena.csv (pipeline/precios.py).
+elif vista == "precios":
+    cabecera_vista("precios")
+    con = (comparativo.dropna(subset=["mercado_mediana"])
+           if "mercado_mediana" in comparativo else pd.DataFrame())
+    if not len(con):
+        with st.container(border=True, key="tarjeta_precios_vacio"):
+            vacio("precios", "Todavía no hay precios del mercado",
+                  "Corre <code>python -m extractores.precios_profeco</code> y luego "
+                  "<code>python -m pipeline.ejecutar</code> para traer los precios de PROFECO.")
+    else:
+        zona = con["zona"].iloc[0]
+        fecha = pd.to_datetime(con["fecha_precios"]).max()
+        mes_precios = f"{MESES[fecha.month - 1]} de {fecha.year}"
+        cerca = "" if zona.startswith("Colima") else (
+            "PROFECO no registra precios en Colima, así que se usan los de la "
+            f"<b>{zona.lower()}</b>, la más cercana con datos. ")
+        html(f'<div class="aviso"><span class="insignia">Referencia</span><span>{cerca}Precios '
+             f"de {mes_precios} en supermercados, tiendas de conveniencia, mercados y "
+             "tortillerías (PROFECO, Quién es Quién en los Precios). Cada precio se lleva a la "
+             "misma cantidad que vendes tú.</span></div>")
+        caros = con[con["diferencia_pct"] > 5]
+        conviene = con[con["ahorro_por_pieza"] > 0]
+        minis = [("Productos comparados", f"{len(con)} de {len(comparativo)}"),
+                 ("Más caros que el mercado", f"{len(caros)}"),
+                 ("Ahorro posible al mes", pesos(con["ahorro_mes"].sum()))]
+        html('<div class="minis minis-precios">' + "".join(
+            f'<div class="mini"><span>{etiqueta}</span><b>{valor}</b></div>'
+            for etiqueta, valor in minis) + "</div>")
+
+        def centavos(x):
+            return f"${x:,.2f}"
+
+        def marca(m):
+            return "Sin marca (granel)" if m == "S/M" else m
+
+        # --- Buscador: encuentra un producto aunque se escriba con errores (tablero/buscador.py).
+        # Cada producto se busca por su nombre, sinónimos, descripción, categoría y las marcas
+        # que PROFECO registra para él. Las fichas de "También" llevan ?q= para buscarlas.
+        mercado = leer(PLATA / "precios_mercado.csv")
+        marcas = (mercado.groupby("producto_tienda")["marca"].unique() if len(mercado)
+                  else pd.Series(dtype=object))
+        docs = [documento(r["producto"], nombre(r["producto"]),
+                          r["equivalente"] if isinstance(r["equivalente"], str) else "",
+                          r["categoria"], marcas.get(r["producto"], ()))
+                for _, r in comparativo.iterrows()]
+        encontrados = []
+        with st.container(border=True, key="tarjeta_buscador"):
+            titulo_tarjeta("buscar", "Busca un producto",
+                           "Escribe como quieras y presiona Enter: entiende errores de dedo, "
+                           "nombres comunes (chesco, papel de baño) y marcas (Lala, Bimbo)")
+            consulta = st.text_input("Buscar un producto", key="buscar_precio",
+                                     value=st.query_params.get("q", ""),
+                                     placeholder="Ej.: asucar, chesco, jabon, lala…",
+                                     label_visibility="collapsed")
+            if consulta.strip():
+                encontrados = buscar(consulta, docs)
+            if consulta.strip() and not encontrados:
+                html(f'<p class="sin-resultados">No encontramos «{consulta.strip()}». Prueba '
+                     "con otra palabra: azúcar, refresco, leche, detergente…</p>")
+            elif encontrados:
+                clave = encontrados[0][0]
+                r = comparativo.set_index("producto").loc[clave]
+                doc = next(d for d in docs if d["clave"] == clave)
+                quisiste = (f'<span class="quisiste">¿Quisiste decir <b>{nombre(clave)}</b>?'
+                            "</span>" if hubo_correccion(consulta, doc) else "")
+                cuantos = (f"{len(encontrados)} resultados" if len(encontrados) > 1
+                           else "1 resultado")
+                que_es = (r["equivalente"] if isinstance(r["equivalente"], str)
+                          else r["categoria"])
+                partes = [f'<div class="resultado-cabeza">{ficha(clave, tam="grande")}<div>'
+                          f'<b>{nombre(clave)}</b><small>{que_es}</small>{quisiste}</div>'
+                          f'<span class="pastilla">{cuantos}</span></div>']
+                if pd.notna(r["mercado_mediana"]):
+                    dif = r["diferencia_pct"]
+                    tono = "mal" if dif > 5 else "bien" if dif < -5 else "neutro"
+                    propia = (f'<b>{centavos(r["mercado_min"])}</b><small>{r["mejor_marca"]} · '
+                              f'{r["mejor_cadena"]}</small>' if r["mejor_marca_propia"] else
+                              "<b>—</b><small>No hay más barata</small>")
+                    fichas_dato = [
+                        ("Tu precio", f'<b>{centavos(r["tu_precio"])}</b><small>'
+                                      f'<span class="cambio {tono}">{dif:+.1f} %</span> contra '
+                                      "el mercado</small>"),
+                        ("Mediana del mercado", f'<b>{centavos(r["mercado_mediana"])}</b>'
+                                                f'<small>En {int(r["tiendas"])} tiendas</small>'),
+                        ("Marca comercial más barata",
+                         f'<b>{centavos(r["comercial_precio"])}</b><small>'
+                         f'{marca(r["comercial_marca"])} · {r["comercial_tienda"]}</small>'),
+                        ("Marca propia más barata", propia)]
+                    partes.append('<div class="minis cuatro">' + "".join(
+                        f'<div class="mini"><span>{e}</span>{v}</div>'
+                        for e, v in fichas_dato) + "</div>")
+                    lugar = ("en línea con el mercado" if tono == "neutro" else
+                             f"<b>{abs(dif):.0f} % {'arriba' if dif > 0 else 'abajo'}</b> del "
+                             "mercado")
+                    cual = ("a granel" if r["comercial_marca"] == "S/M"
+                            else r["comercial_marca"])
+                    surtir = (f"; si surtes {cual} en "
+                              f"{r['comercial_tienda']}, tu costo baja "
+                              f"<b>{centavos(r['ahorro_por_pieza'])}</b> por pieza (unos "
+                              f"<b>{pesos(r['ahorro_mes'])}</b> al mes)"
+                              if r["ahorro_por_pieza"] > 0 else
+                              "; tu costo ya es menor que la marca comercial más barata")
+                else:
+                    partes.append('<p class="sin-resultados">PROFECO no registra un producto '
+                                  "equivalente, así que no se puede comparar su precio.</p>")
+                    lugar = surtir = ""
+                otros = "".join(
+                    f'<a class="otro" href="?vista=precios&amp;q={quote(nombre(c))}" '
+                    f'target="_self">{ficha(c)}{nombre(c)}</a>' for c, _ in encontrados[1:])
+                if otros:
+                    partes.append(f'<div class="otros"><span>También:</span>{otros}</div>')
+                html('<div class="resultado">' + "".join(partes) + "</div>")
+                if lugar:
+                    lectura(f"Tu precio está {lugar}{surtir}")
+
+        col_tu, col_cadena = st.columns(2, gap="medium")
+        cad = (cadenas[cadenas["productos"] >= 8].assign(diferencia=cadenas["indice"] - 100)
+               if len(cadenas) else pd.DataFrame())
+        alto = max(len(con), len(cad), 8) * 24 + 10
+
+        def divergente(datos, campo, eje, tooltip, tolerancia, fichas=False):
+            """Barras desde el cero: a la izquierda más barato (verde), a la derecha más caro
+            (rojo) y en gris lo que está a menos de `tolerancia` % del mercado."""
+            datos = datos.assign(
+                tono=np.select([datos[campo] > tolerancia, datos[campo] < -tolerancia],
+                               ["caro", "barato"], "parecido"),
+                txt=datos[campo].map(lambda v: f"{v:+.1f} %"))
+            orden = list(datos.sort_values(campo, ascending=False)[eje])
+            con_signo = "(datum.value > 0 ? '+' : '') + datum.value + ' %'"
+            eje_y = alt.Y(f"{eje}:N", sort=orden, title=None,
+                          axis=alt.Axis(labelPadding=32) if fichas else alt.Undefined)
+            base = alt.Chart(datos).encode(
+                y=eje_y,
+                x=alt.X(f"{campo}:Q", title=None, scale=alt.Scale(nice=True, padding=40),
+                        axis=alt.Axis(labelExpr=con_signo)),
+                tooltip=tooltip)
+            sel, opacidad = resalte(eje)
+            barras = base.mark_bar(cornerRadiusEnd=4).encode(
+                opacity=opacidad,
+                color=alt.Color("tono:N", legend=None, scale=alt.Scale(
+                    domain=["caro", "barato", "parecido"], range=[ROJO, VERDE, GRIS])))
+            cero = alt.Chart(pd.DataFrame({"x": [0]})).mark_rule(color=TEXTO_EJE).encode(x="x:Q")
+            textos = [base.transform_filter(f"datum.{campo} {signo} 0").mark_text(
+                align=lado, dx=dx, fontSize=11, fontWeight=700, color=TEXTO).encode(text="txt:N")
+                for signo, lado, dx in ((">=", "left", 5), ("<", "right", -5))]
+            capas = barras.add_params(sel) + cero + textos[0] + textos[1]
+            return capas + fichas_en_eje(datos, eje_y) if fichas else capas
+
+        with col_tu, st.container(border=True, key="tarjeta_tu_precio"):
+            titulo_tarjeta("precios", "Tu precio contra el mercado",
+                           f"Contra la mediana de PROFECO {punto(ROJO)}Más caro "
+                           f"{punto(VERDE)}Más barato {punto(GRIS)}Parecido (±5 %)",
+                           (con[["producto", "tu_precio", "mercado_mediana", "mercado_min",
+                                 "tiendas", "diferencia_pct"]], "tu_precio_vs_mercado.csv"))
+            st.altair_chart(estilo(divergente(
+                con_fichas(con), "diferencia_pct", "producto",
+                [alt.Tooltip("producto:N", title="Producto"), dinero("tu_precio", "Tu precio"),
+                 dinero("mercado_mediana", "Mediana del mercado"),
+                 alt.Tooltip("txt:N", title="Diferencia"),
+                 alt.Tooltip("tiendas:Q", title="Tiendas comparadas")], 5, fichas=True),
+                alto))
+            if len(caros):
+                peor = caros.loc[caros["diferencia_pct"].idxmax()]
+                lectura(f"Estás arriba del mercado en <b>{len(caros)} productos</b>; el que más: "
+                        f"<b>{nombre(peor['producto']).lower()}</b>, "
+                        f"{peor['diferencia_pct']:+.0f} %")
+            else:
+                lectura("Tus precios están en línea con el mercado")
+
+        with col_cadena, st.container(border=True, key="tarjeta_cadenas"):
+            titulo_tarjeta("tienda", "¿Dónde conviene surtir?",
+                           f"Precio promedio de cada cadena contra el mercado "
+                           f"{punto(VERDE)}Más barata {punto(ROJO)}Más cara",
+                           (cad, "precios_por_cadena.csv") if len(cad) else None)
+            if len(cad):
+                st.altair_chart(estilo(divergente(
+                    cad, "diferencia", "cadena_comercial",
+                    [alt.Tooltip("cadena_comercial:N", title="Cadena"),
+                     alt.Tooltip("txt:N", title="Contra el mercado"),
+                     alt.Tooltip("productos:Q", title="Productos comparados"),
+                     alt.Tooltip("mas_barata_en:Q", title="Más barata en")], 2), alto))
+                top = cad.iloc[0]
+                lectura(f"<b>{top['cadena_comercial']}</b> sale <b>{-top['diferencia']:.1f} % más "
+                        f"barata</b> que el mercado en {top['productos']} productos")
+            else:
+                vacio("tienda", "Pocas cadenas para comparar",
+                      "Hace falta que una cadena tenga al menos 8 productos comparables.")
+
+        # Tabla: la mejor alternativa por producto (las que convienen primero).
+        with st.container(border=True, key="tarjeta_alternativas"):
+            columnas = ["producto", "equivalente", "tu_costo", "comercial_marca",
+                        "comercial_cadena", "comercial_tienda", "comercial_precio",
+                        "ahorro_por_pieza", "ahorro_mes", "mejor_marca", "mejor_cadena",
+                        "mercado_min", "mejor_marca_propia"]
+            titulo_tarjeta("productos", "Mejor alternativa por producto",
+                           "La opción más barata de marca comercial contra tu costo; aparte, la "
+                           "marca propia de la cadena si sale más barata",
+                           (con[columnas], "mejor_alternativa.csv"))
+            tabla = con.sort_values(["ahorro_mes", "ahorro_por_pieza"], ascending=False)
+            # Con una búsqueda, la tabla muestra solo lo encontrado (en orden de parecido).
+            orden = [c for c, _ in encontrados if c in set(con["producto"])]
+            if orden:
+                tabla = con.set_index("producto").loc[orden].reset_index()
+                html(f'<p class="filtrada">Mostrando {len(orden)} de {len(con)} productos por '
+                     f"tu búsqueda «{consulta.strip()}». Borra el texto para ver todos.</p>")
+
+            renglones = []
+            for _, r in tabla.iterrows():
+                ahorra = r["ahorro_por_pieza"] > 0
+                propia = (f'<span class="propia">{r["mejor_marca"]} · {r["mejor_cadena"]}: '
+                          f'<b>{centavos(r["mercado_min"])}</b></span>'
+                          if r["mejor_marca_propia"] else '<span class="nada">—</span>')
+                renglones.append(
+                    f'<tr><td class="prod">{ficha(r["producto"])}<span><b>'
+                    f'{nombre(r["producto"])}</b><small>{r["equivalente"]}</small></span></td>'
+                    f'<td class="num" data-etiqueta="Tu costo">{centavos(r["tu_costo"])}</td>'
+                    f'<td data-etiqueta="Marca comercial más barata">'
+                    f'<b>{marca(r["comercial_marca"])}</b>'
+                    f'<small>{r["comercial_tienda"]}</small></td>'
+                    f'<td class="num" data-etiqueta="Precio">{centavos(r["comercial_precio"])}'
+                    f'</td><td class="conviene" data-etiqueta="¿Conviene?">'
+                    f'<span class="cambio {"bien" if ahorra else "neutro"}">'
+                    + (f'Ahorras {centavos(r["ahorro_por_pieza"])}' if ahorra else
+                       "Tu costo es menor")
+                    + f'</span></td><td class="{"" if r["mejor_marca_propia"] else "sin-propia"}"'
+                    f' data-etiqueta="Marca propia más barata">{propia}</td></tr>')
+            html('<div class="tabla-envoltura"><table class="tabla-precios"><thead><tr>'
+                 "<th>Producto</th><th>Tu costo</th><th>Marca comercial más barata</th>"
+                 "<th>Precio</th><th>¿Conviene surtir ahí?</th><th>Marca propia más barata</th>"
+                 f'</tr></thead><tbody>{"".join(renglones)}</tbody></table></div>')
+            sin = comparativo[comparativo["mercado_mediana"].isna()]["producto"].map(nombre)
+            lectura(f"Surtiendo esos <b>{len(conviene)} productos</b> con la opción más barata "
+                    f"ahorrarías unos <b>{pesos(con['ahorro_mes'].sum())} al mes</b>, con lo "
+                    "que vendiste en los últimos 30 días"
+                    + (f". Sin equivalente en PROFECO: {', '.join(sin).lower()}" if len(sin)
+                       else ""))
+            st.caption("Fuente: PROFECO, Quién es Quién en los Precios (datos abiertos, "
+                       "Términos de Libre Uso MX)."
+                       + (" Los precios y costos de tu tienda son de demostración." if demo
+                          else ""))
+    pasos("precios")
 
 # --- Vista: competencia en la zona --------------------------------------------------
 elif vista == "competencia":
@@ -1372,6 +1762,6 @@ volver = ('<a class="arriba" href="#inicio">↑ Volver arriba</a>' if vista == "
           f'<a class="arriba" {ir("inicio")}>← Volver al resumen</a>')
 html(f'<div class="pie">{logo("TABLERO DEL DUEÑO")}'
      "<div>Fuentes: punto de venta (demostración)<i></i>Open-Meteo<i></i>"
-     "© colaboradores de OpenStreetMap</div>"
+     "© colaboradores de OpenStreetMap<i></i>PROFECO (Quién es Quién en los Precios)</div>"
      "<div>Linaje: cada cifra sale de data/oro y trae fuente, archivo de bronce y fecha de "
      f'captura.</div>{volver}</div>')
