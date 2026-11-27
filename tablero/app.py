@@ -71,6 +71,8 @@ EVENTOS = {"normal": "Día normal", "cabalgata": "Cabalgata",
 VISTAS = {
     "inicio": ("Resumen", "barras", "Resumen del mes",
                "Indicadores, promedios por día y productos con más ganancia."),
+    "informe": ("Informe", "informe", "Informe del mes",
+                "Cómo vas contra el mes anterior, qué cambió y lo que hay que saber."),
     "venta": ("Venta", "serie", "Venta por día",
               "Cómo se movió la venta día a día y cuál fue el mejor día."),
     "productos": ("Productos", "productos", "Productos y días fuertes",
@@ -108,6 +110,18 @@ ICONOS = {
               "3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456Z",
     "descarga": "M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 "
                 "12 16.5m0 0L7.5 12m4.5 4.5V3",
+    "informe": "M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 "
+               "7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25M9 16.5v.75m3-3v3M15 12v5.25m-4.5-15"
+               "H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621"
+               " 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z",
+    "imprimir": "M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0 1 10.56 0m"
+                "-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0 .229 "
+                "2.523a1.125 1.125 0 0 1-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m"
+                "11.318 0h1.091A2.25 2.25 0 0 0 21 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a"
+                "48.055 48.055 0 0 0-1.913-.247M6.34 18H5.25A2.25 2.25 0 0 1 3 15.75V9.456c0-1.081"
+                ".768-2.015 1.837-2.175a48.041 48.041 0 0 1 1.913-.247m10.5 0a48.536 48.536 0 0 "
+                "0-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125"
+                " 1.125v3.659M18 10.5h.008v.008H18V10.5Zm-3 0h.008v.008H15V10.5Z",
     "sube": "m4.5 19.5 15-15m0 0H8.25m11.25 0v11.25",
     "baja": "m4.5 4.5 15 15m0 0V8.25m0 11.25H8.25",
     "tienda": "M13.5 21v-7.5a.75.75 0 0 1 .75-.75h3a.75.75 0 0 1 .75.75V21m-4.5 0H2.36m11.14 0H18"
@@ -370,6 +384,48 @@ div[class*="st-key-tarjeta"]:hover { box-shadow: var(--sombra-alta); }
 .vista-titulo p { margin: .25rem 0 0; font-size: .95rem; color: var(--texto-suave); }
 .vista-titulo .pastilla { align-self: flex-start; }
 
+/* Informe del mes: periodo y botón de imprimir, hallazgos y listas de productos que cambian */
+.acciones-informe { display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: .75rem; }
+.acciones-informe .periodo { display: inline-flex; align-items: center; gap: .5rem;
+  font-size: .88rem; font-weight: 600; color: var(--texto-suave); }
+.acciones-informe .periodo svg { width: 1.1rem; height: 1.1rem; color: var(--azul); }
+.acciones-informe .periodo b { color: var(--tinta); }
+.imprimir { display: inline-flex; align-items: center; gap: .5rem; padding: .62rem 1.1rem;
+  border: 0; border-radius: .8rem; background: var(--azul); color: #FFFFFF;
+  font-family: var(--fuente); font-size: .86rem; font-weight: 700; cursor: pointer;
+  box-shadow: 0 8px 18px -10px rgba(37, 99, 235, .9); transition: background .2s ease; }
+.imprimir:hover { background: #1D4ED8; }
+.imprimir:focus-visible { outline: 2px solid var(--azul); outline-offset: 3px; }
+.imprimir svg { width: 1.1rem; height: 1.1rem; }
+.saber { padding: 1.3rem 1.4rem 1.35rem; }
+.hallazgos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .85rem;
+  margin-top: 1.1rem; }
+.hallazgo { display: flex; align-items: flex-start; gap: .8rem; padding: .95rem 1.05rem;
+  border-radius: .95rem; background: var(--f); }
+.hallazgo .h-icono { flex: none; width: 2.2rem; height: 2.2rem; border-radius: .7rem;
+  display: grid; place-items: center; color: var(--c); background: #FFFFFF; }
+.hallazgo .h-icono svg { width: 1.15rem; height: 1.15rem; }
+.hallazgo p { margin: 0; align-self: center; font-size: .92rem; line-height: 1.55;
+  color: var(--texto); }
+.hallazgo p b { font-weight: 800; color: var(--tinta); }
+.h-neutro { --c: #2563EB; --f: #EEF4FF; } .h-bien { --c: #059669; --f: #ECFDF5; }
+.h-mal { --c: #E11D48; --f: #FFF1F2; }
+.cambios { display: flex; flex-direction: column; gap: .6rem; margin-top: 1.1rem; }
+.fila-cambio { display: grid; align-items: center; gap: .75rem; padding: .55rem .2rem;
+  grid-template-columns: 1.6rem minmax(0, 1fr) auto 5.2rem;
+  border-bottom: 1px solid var(--borde); }
+.fila-cambio:last-child { border-bottom: 0; }
+.fila-cambio .pos { width: 1.6rem; height: 1.6rem; border-radius: .5rem; display: grid;
+  place-items: center; color: var(--c); background: var(--f); }
+.fila-cambio .pos svg { width: .9rem; height: .9rem; }
+.fila-cambio .nom { font-size: .88rem; font-weight: 600; color: var(--texto); white-space: nowrap;
+  overflow: hidden; text-overflow: ellipsis; }
+.fila-cambio .por-dia { font-size: .8rem; color: var(--texto-tenue);
+  font-variant-numeric: tabular-nums; }
+.fila-cambio .cambio { justify-self: end; }
+.sin-cambios { margin: 1.1rem 0 0; font-size: .88rem; color: var(--texto-tenue); }
+
 /* Anterior y siguiente al final de cada vista */
 .pasos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem;
   margin-top: 1.75rem; }
@@ -525,6 +581,10 @@ div.pie i { display: inline-block; width: .28rem; height: .28rem; margin: 0 .6re
   div.tarjeta-nota { white-space: normal; min-height: 2.9em; } }
 @media (max-width: 1300px) { .usuario b { display: none; }
   div.tarjeta-titulo .texto { white-space: normal; } }
+/* Con 6 pestañas la barra no cabe: fuera el estado (el aviso del resumen ya lo dice) y
+   pestañas más compactas */
+@media (max-width: 1200px) { .app-barra .estado { display: none; } }
+@media (max-width: 1100px) { .pestanas a { padding: .45rem .75rem; font-size: .84rem; } }
 @media (max-width: 1100px) { .kpis, .accesos { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .bienvenida { grid-template-columns: 1fr; } }
 @media (max-width: 900px) { .app-barra .pestanas { display: none; }
@@ -533,7 +593,9 @@ div.pie i { display: inline-block; width: .28rem; height: .28rem; margin: 0 .6re
   .block-container { padding: 1rem 1rem 2rem; }
   .app-barra .estado, .usuario b { display: none; }
   .saludo .hola { font-size: 1.75rem; }
-  .kpis, .minis, .accesos, .pasos { grid-template-columns: 1fr; }
+  .kpis, .minis, .accesos, .pasos, .hallazgos { grid-template-columns: 1fr; }
+  .fila-cambio { grid-template-columns: 1.6rem minmax(0, 1fr) 5.2rem; }
+  .fila-cambio .por-dia { display: none; }
   .paso.sig { grid-column: auto; }
   .vista-titulo b { font-size: 1.5rem; } .vista-titulo .pastilla { display: none; }
   .aviso { flex-direction: column; align-items: flex-start; gap: .5rem; }
@@ -557,9 +619,9 @@ div.pie i { display: inline-block; width: .28rem; height: .28rem; margin: 0 .6re
     background: #FFFFFF !important; }
   .card, .aviso, div[class*="st-key-tarjeta"] { box-shadow: none !important;
     animation: none !important; break-inside: avoid; }
-  .cta, .logo-cuadro, .avatar, .tile, .mini, .cambio, .kpi-icono {
+  .cta, .logo-cuadro, .avatar, .tile, .mini, .cambio, .kpi-icono, .hallazgo, .fila-cambio .pos {
     -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  .barra, .pestanas, .ver, .volver, .pasos, .accesos, .pie .arriba, .st-key-rango_venta,
+  .barra, .pestanas, .ver, .volver, .pasos, .accesos, .pie .arriba, .st-key-rango_venta, .imprimir,
   [data-testid="stElementToolbar"], .tarjeta-titulo .accion { display: none !important; }
   div.bloque { break-after: avoid; } }
 </style>
@@ -784,7 +846,7 @@ bienvenida = f"""
     <div class="hola">{saludo}, <em>Dueño</em></div>
     <p>Así va tu tienda en {nombre_mes}.</p>
   </div>
-  <a class="cta" {ir("venta")}><span class="chip-cta">{icono("tienda")}</span>
+  <a class="cta" {ir("informe")}><span class="chip-cta">{icono("informe")}</span>
     <span class="txt-cta"><b>Informe de {nombre_mes}</b><span>{periodo}</span>
     </span><span class="ir">{icono("flecha", 2)}</span></a>
 </div>""" if vista == "inicio" else ""
@@ -882,6 +944,167 @@ if vista == "inicio":
         f'<span class="entrar">Entrar {icono("flecha", 2)}</span></a>'
         for c, dato in datos_acceso.items()) + "</div>")
 
+
+# --- Vista: informe del mes -------------------------------------------------------------
+# Cierre del mes contra el anterior (lo que la vista "Venta" no hace: esa muestra la historia
+# larga). Todo se compara con los mismos días del mes anterior, salvo el cierre de ese mes.
+elif vista == "informe":
+    cabecera_vista("informe")
+    nombre_ant = MESES[mes_ant.month - 1]
+    mes_previo = diarias[diarias["fecha"].dt.to_period("M") == mes_ant]
+    # El botón llama a window.print(); st.html deja correr ese script (st.markdown lo quitaría).
+    st.html(f'<div class="acciones-informe"><span class="periodo">{icono("semana")}'
+            f"<span><b>{periodo}</b> · comparado con {vs}</span></span>"
+            f'<button type="button" class="imprimir" id="imprimir-informe">'
+            f'{icono("imprimir", 1.8)}Imprimir o guardar en PDF</button></div>'
+            "<script>document.getElementById('imprimir-informe')"
+            ".addEventListener('click', () => window.print());</script>",
+            unsafe_allow_javascript=True)
+
+    if not len(mes) or not len(anterior):
+        with st.container(border=True, key="tarjeta_informe_vacio"):
+            vacio("informe", "Todavía no hay con qué comparar",
+                  "El informe necesita ventas de este mes y del mes anterior.")
+    else:
+        # --- 1. Lo que hay que saber: 4 conclusiones escritas a partir de los datos ---------
+        venta_act, venta_ant = mes["venta"].sum(), anterior["venta"].sum()
+        mejor = mes.loc[mes["venta"].idxmax()]
+        f = mejor["fecha"]
+        evento = mejor["evento"] if isinstance(mejor["evento"], str) else ""
+        contexto = (f", día de {EVENTOS.get(evento, evento).lower()}" if evento else
+                    ", día de quincena" if f.day in (1, 15, 16, 30, 31) else
+                    ", en fin de semana" if f.dayofweek >= 5 else "")
+        hallazgos = [("h-neutro", "semana",
+                      f"Tu mejor día fue el <b>{DIAS_LARGOS[f.dayofweek]} {f.day}</b>{contexto}, "
+                      f"con <b>{pesos(mejor['venta'])}</b>.")]
+        finde = mes["fecha"].dt.dayofweek >= 5
+        if finde.any() and (~finde).any():
+            extra = (mes.loc[finde, "venta"].mean() / mes.loc[~finde, "venta"].mean() - 1) * 100
+            hallazgos.append(("h-neutro", "barras",
+                              f"Sábado y domingo vendieron <b>{abs(extra):.0f} % "
+                              f"{'más' if extra >= 0 else 'menos'}</b> por día que entre semana."))
+        fiado_act, fiado_ant = mes["venta_fiado"].sum(), anterior["venta_fiado"].sum()
+        if fiado_ant:
+            cambio_fiado = (fiado_act / fiado_ant - 1) * 100
+            hallazgos.append(("h-mal" if cambio_fiado > 0 else "h-bien", "fiado",
+                              f"El fiado {'subió' if cambio_fiado > 0 else 'bajó'} "
+                              f"<b>{abs(cambio_fiado):.1f} %</b> contra {vs}; es el "
+                              f"<b>{fiado_act / venta_act * 100:.1f} %</b> de la venta."))
+        margen_act = mes["ganancia"].sum() / venta_act * 100
+        margen_ant = anterior["ganancia"].sum() / venta_ant * 100
+        hallazgos.append(("h-bien" if margen_act >= margen_ant else "h-mal", "ganancia",
+                          f"El margen fue de <b>{margen_act:.1f} %</b> (en {nombre_ant}, "
+                          f"{margen_ant:.1f} %) y cada ticket dejó en promedio "
+                          f"<b>{pesos(venta_act / mes['tickets'].sum())}</b>."))
+        # &nbsp; para que "37 %" no se parta en dos renglones.
+        html(f'<div class="card saber"><div class="card-cabeza"><span class="chip-icono">'
+             f'{icono("chispa")}</span><b>Lo que hay que saber</b></div>'
+             '<div class="hallazgos">' + "".join(
+                 f'<div class="hallazgo {tono}"><span class="h-icono">{icono(dibujo)}</span>'
+                 f'<p>{texto.replace(" %", "&nbsp;%")}</p></div>'
+                 for tono, dibujo, texto in hallazgos) + "</div></div>")
+
+        # --- 2. Carrera contra el mes anterior: venta acumulada día por día ----------------
+        with st.container(border=True, key="tarjeta_carrera"):
+            def acumulada(tabla):
+                t = tabla.sort_values("fecha")
+                return pd.Series(t["venta"].cumsum().to_numpy(), index=t["fecha"].dt.day)
+
+            carrera = (pd.DataFrame({"ahora": acumulada(mes), "antes": acumulada(mes_previo)})
+                       .rename_axis("dia").reset_index())
+            for col in ("ahora", "antes"):
+                carrera[f"{col}_txt"] = carrera[col].map(
+                    lambda v: "—" if pd.isna(v) else pesos(v))
+            mes_corto = nombre_mes.split()[0].capitalize()
+            titulo_tarjeta("serie", f"Carrera contra {nombre_ant}",
+                           f"Venta sumada día por día {punto(AZUL)}{mes_corto}"
+                           f'<span class="raya"></span>{nombre_ant.capitalize()}',
+                           (carrera[["dia", "ahora", "antes"]], "carrera_del_mes.csv"))
+            dia_hoy = int(mes["fecha"].dt.day.max())
+            proyeccion = venta_act / mes["fecha"].nunique() * ultimo_mes.days_in_month
+            minis = [(f"Llevas al día {dia_hoy}", pesos(venta_act)),
+                     (f"{nombre_ant.capitalize()} al día {dia_hoy}", pesos(venta_ant)),
+                     ("Cierre estimado del mes", pesos(proyeccion))]
+            html('<div class="minis">' + "".join(
+                f'<div class="mini"><span>{etiqueta}</span><b>{valor}</b></div>'
+                for etiqueta, valor in minis) + "</div>")
+
+            dias_eje = alt.Axis(values=[1, 8, 15, 22, 29], labelExpr="'Día ' + datum.value")
+            eje_x = alt.X("dia:Q", title=None, scale=alt.Scale(domain=[1, 31], nice=False),
+                          axis=dias_eje)
+            eje_y = alt.Axis(format="$,.0f")
+            ahora = alt.Chart(carrera.dropna(subset=["ahora"])).encode(
+                x=eje_x, y=alt.Y("ahora:Q", title=None, axis=eje_y))
+            antes = alt.Chart(carrera.dropna(subset=["antes"])).encode(
+                x=eje_x, y=alt.Y("antes:Q", title=None, axis=eje_y))
+            area = ahora.mark_area(color=degradado("rgba(37,99,235,0)", "rgba(37,99,235,0.16)",
+                                                   vertical=True))
+            linea_antes = antes.mark_line(color=TEXTO_EJE, strokeDash=[6, 4], strokeWidth=2)
+            linea_ahora = ahora.mark_line(color=AZUL, strokeWidth=3)
+            # Dónde va cada mes el último día con datos, y en cuánto cerró el mes anterior.
+            hoy_fila = carrera[carrera["dia"] == dia_hoy]
+            punta = alt.Chart(hoy_fila).encode(x=eje_x, y="ahora:Q")
+            punta = (punta.mark_circle(size=90, color=AZUL, stroke="white", strokeWidth=2,
+                                       opacity=1)
+                     + punta.mark_text(dy=-16, fontSize=12, fontWeight=800, color=AZUL,
+                                       text=pesos(venta_act)))
+            par = alt.Chart(hoy_fila).mark_circle(size=60, color=TEXTO_EJE, stroke="white",
+                                                  strokeWidth=2, opacity=1).encode(
+                x=eje_x, y="antes:Q")
+            cierre = alt.Chart(carrera.dropna(subset=["antes"]).tail(1)).encode(
+                x=eje_x, y="antes:Q")
+            cierre = (cierre.mark_circle(size=50, color=TEXTO_EJE, opacity=1)
+                      + cierre.mark_text(align="right", dx=-8, dy=-12, fontSize=11,
+                                         fontWeight=700, color=TEXTO_EJE,
+                                         text=f"Cerró en {pesos(mes_previo['venta'].sum())}"))
+            # Al pasar el cursor: línea vertical y un globo con los dos meses de ese día.
+            cursor = alt.selection_point(nearest=True, on="pointerover", clear="pointerout",
+                                         fields=["dia"], empty=False)
+            selector = alt.Chart(carrera).mark_point(opacity=0).encode(
+                x=eje_x, y="antes:Q",
+                tooltip=[alt.Tooltip("dia:Q", title="Día"),
+                         alt.Tooltip("ahora_txt:N", title=mes_corto),
+                         alt.Tooltip("antes_txt:N", title=nombre_ant.capitalize())]
+            ).add_params(cursor)
+            guia = alt.Chart(carrera).mark_rule(color=TEXTO_EJE, strokeDash=[4, 3]).encode(
+                x=eje_x).transform_filter(cursor)
+            st.altair_chart(estilo(alt.layer(area, linea_antes, linea_ahora, guia, cierre, par,
+                                             punta, selector), ALTO_SERIE))
+            diferencia = (venta_act / venta_ant - 1) * 100
+            lectura(f"Vas <b>{abs(diferencia):.1f} % {'arriba' if diferencia >= 0 else 'abajo'}"
+                    f"</b> de {nombre_ant} a la misma fecha; a este ritmo cerrarías "
+                    f"{nombre_mes.split()[0]} en unos <b>{pesos(proyeccion)}</b>")
+
+        # --- 3. Qué cambió: productos que suben y que bajan (venta por día) ----------------
+        # Se compara la venta POR DÍA de cada producto: el mes en curso puede ir a la mitad.
+        def por_dia(periodo_mes, tabla):
+            filas = producto[producto["mes"] == str(periodo_mes)].set_index("producto")
+            return filas["venta"] / max(tabla["fecha"].nunique(), 1)
+
+        cambio = pd.DataFrame({"ahora": por_dia(ultimo_mes, mes),
+                               "antes": por_dia(mes_ant, mes_previo)}).dropna()
+        cambio["pct"] = (cambio["ahora"] / cambio["antes"] - 1) * 100
+        listas = [("Productos que suben", "sube", "h-bien", "bien",
+                   cambio[cambio["pct"] > 0].nlargest(5, "pct"),
+                   "Ningún producto vendió más que el mes pasado."),
+                  ("Productos que bajan", "baja", "h-mal", "mal",
+                   cambio[cambio["pct"] < 0].nsmallest(5, "pct"),
+                   "Ningún producto vendió menos que el mes pasado.")]
+        tarjetas_cambio = []
+        for titulo, flecha, tono, clase, tabla, vacia in listas:
+            filas = "".join(
+                f'<div class="fila-cambio {tono}"><span class="pos">{icono(flecha, 2.2)}</span>'
+                f'<span class="nom">{nombre}</span><span class="por-dia">'
+                f'{pesos(p["ahora"])} por día</span><span class="cambio {clase}">'
+                f'{p["pct"]:+.1f} %</span></div>' for nombre, p in tabla.iterrows())
+            tarjetas_cambio.append(
+                f'<div class="card"><div class="card-cabeza"><span class="chip-icono">'
+                f'{icono(flecha)}</span><b>{titulo}</b><span class="pastilla">Venta por día vs '
+                f'{nombre_ant}</span></div>'
+                + (f'<div class="cambios">{filas}</div>' if filas else
+                   f'<p class="sin-cambios">{vacia}</p>') + "</div>")
+        html(f'<div class="duo">{"".join(tarjetas_cambio)}</div>')
+    pasos("informe")
 
 # --- Vista: venta por día ------------------------------------------------------------
 elif vista == "venta":
