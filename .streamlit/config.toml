@@ -1,0 +1,14 @@
+# Tema del tablero: estilo de app de punto de venta (fondo azul muy claro, tarjetas blancas,
+# acento azul). Se lee al correr `streamlit run tablero/app.py` desde la raiz del repositorio.
+[theme]
+base = "light"
+primaryColor = "#2563EB"
+backgroundColor = "#EAF1FD"
+secondaryBackgroundColor = "#F1F5FB"
+textColor = "#1E293B"
+borderColor = "#E3EAF6"
+font = "sans-serif"
+
+[client]
+# Oculta la barra de herramientas de Streamlit (boton "Deploy") para que el tablero se vea limpio.
+toolbarMode = "minimal"
