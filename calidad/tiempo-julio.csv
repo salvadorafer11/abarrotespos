@@ -3,3 +3,8 @@ fecha,inicio,fin,interrupcion_min,fase,actividad
 2026-11-23,14:50,15:17,0,codificación,Clonar repo, rama julio-datos, entorno virtual y dependencias
 2026-11-23,15:17,16:00,0,codificación,J2 unión espacial GeoPandas, mapa del tablero, J4 ética y J5 verificador de linaje (con Claude)
 2026-11-23,16:00,16:25,0,pruebas,Corrida de extractores OSM y clima, corrección de robots.txt en APIs públicas, linaje con datos reales
+2026-11-27,,,,codificación,"Informe del mes: conclusiones, carrera contra el mes anterior, productos que suben y bajan, botón de imprimir (con Claude)"
+2026-11-27,,,,codificación,"J6 precios de mercado PROFECO QQP: extractor, comparación en el pipeline y sección Precios del tablero (con Claude)"
+2026-11-27,,,,diseño,"Dibujo propio por producto, nombres con acentos, pestañas en celular y tabla de precios en tarjetas (con Claude)"
+2026-11-27,,,,codificación,Buscador de productos que tolera errores de dedo (con Claude)
+2026-11-27,,,,pruebas,Pruebas de precios y del buscador; prueba de humo del tablero con AppTest
